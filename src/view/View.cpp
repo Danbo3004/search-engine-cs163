@@ -2,12 +2,43 @@
 
 namespace view{
 	View::View(){
-		freopen(constants::stopwordsPath.c_str(), "r", stdin);
+		std::ifstream in(constants::stopwordsPath.c_str());
 		std::string word;
-		while (std::getline(std::cin,word)){
+		while (std::getline(in,word)){
 			stopwordsSet.insert(word);
 		}
-		fclose(stdin);
+		in.close();
+	}
+
+	void View::typeInput(std::string& field, const int& fieldLim/* = INT_MAX*/){
+
+		/*/-------------not cross-platform-----------------------------------------------------------------------------------------
+		char ch;
+		int i = 0;
+		ch = getch();
+		while(ch != '\n'){                  // gets input until 'Enter' key is pressed
+			if(ch == '\b'){
+				if(field.size() > 0 ){
+					field.erase(field.begin() + field.size() -1);
+					std::cout << "\b \b";
+					i--;
+				}
+				ch = getch();
+			}
+			else{
+				if(i<fieldLim){
+					field.push_back(ch);
+					std::cout<<ch;
+					ch = getch();
+					i++;
+				}
+				else{
+					ch = getch();
+				}
+			}
+		}
+		*///-----------------------------------------------------------------------------------------------------------------------
+		getline(std::cin,field);
 	}
 
 	void View::searchView(){
@@ -44,7 +75,7 @@ namespace view{
 		time();
 		gotoxy(20,20);
 		*///-----------------------------------------------------------------------------------------------------------------------
-		std::cout << "Search: \t\t ";
+		std::cout << "Search:  ";
 		typeInput(query);
 
 		//find and remove query cues first
@@ -60,39 +91,12 @@ namespace view{
 
 	}
 
-
+	/*/-------------not cross-platform-----------------------------------------------------------------------------------------
 	void View::gotoxy(int x, int y){         //For Setting the position of Cursor
 		COORD coord = {0,0};
 		coord.X = x;
 		coord.Y = y;
 		SetConsoleCursorPosition( GetStdHandle (STD_OUTPUT_HANDLE), coord );
-	}
-
-	void View::typeInput(std::string& field, const int& fieldLim/* = INT_MAX*/){
-		char ch;
-		int i = 0;
-		ch=getch();
-		while(ch != 13){                  // gets input until 'Enter' key is pressed
-			if(ch == '\b'){
-				if(field.size() > 0 ){
-					field.erase(field.begin() + field.size() -1);
-					std::cout << "\b \b";
-					i--;
-				}
-				ch = getch();
-			}
-			else{
-				if(i<fieldLim){
-					field.push_back(ch);
-					std::cout<<ch;
-					ch = getch();
-					i++;
-				}
-				else{
-					ch = getch();
-				}
-			}
-		}
 	}
 
 	void View::time(){
@@ -105,5 +109,7 @@ namespace view{
 		// Creating Object of Time
 
 	}
+	*///-----------------------------------------------------------------------------------------------------------------------
+
 }
 

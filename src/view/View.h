@@ -6,20 +6,17 @@
 #define VIEW_H
 
 #include <iostream>
-#include <windows.h>
-#include <math.h>
-#include <windows.h>                  // For gotoxy() and Sleep function
+#include <fstream>
 #include <ctime>		           	 // For Displaying time
-#include <iomanip>
-#include <limits>
 #include <climits>
-#include <conio.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include <string>
-#include <cstddef>
-#include <stdio.h>
 #include <set>
+
+/*/-------------not cross-platform-----------------------------------------------------------------------------------------
+#include <windows.h>
+#include <conio.h>
+*///-----------------------------------------------------------------------------------------------------------------------
+
 
 #include "../helpers/helpers.h"
 
