@@ -6,6 +6,7 @@
 #define HELPERS_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -13,6 +14,9 @@
 #include <iterator>
 #include <algorithm>
 #include <locale>
+#include <cstring>
+
+using namespace std;
 
 namespace helpers{
 	std::vector<std::string> stringToVector(std::string);
@@ -26,6 +30,12 @@ namespace helpers{
 namespace constants{
 	const std::string stopwordsPath = "./data/stopwords.txt";
 }
+
+struct DataFile {
+	vector <string> title, content;
+};
+
+DataFile readFile(int fileNumber);
 
 
 #endif
