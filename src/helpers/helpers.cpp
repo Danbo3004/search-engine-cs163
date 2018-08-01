@@ -121,3 +121,32 @@ DataFile readFile(int fileNumber)
 	data.content = helpers::stripNakedKeepStopwords(content);
 	return data;
 }
+
+string convertNumberToString(int number) 
+{
+	string res = "";
+	while (number > 0) res += (number % 10 + '0'), number /= 10;
+	while (res.length() < 2) res = "0" + res;
+	return res;
+}
+
+DataFile readFile(int fileNumber) 
+{
+	int newsNumber = fileNumber % 100;
+	int groupNumber = fileNumber / 100;
+	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
+	ifstream fin;
+	fin.open(fileName);
+	string title, content = "";
+	getline(fin, title);
+	while (!fin.eof()) 
+	{
+		string word;
+		fin >> word;
+		content += word + " ";
+	}
+	DataFile data;
+	//data.title = helpers::stripStopwordstitle();
+	//data.content = helpers::stripStopwords(content);
+	return data;
+}
