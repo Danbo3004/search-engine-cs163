@@ -2,7 +2,7 @@
 
 int Trie::findNode(string Word)
 {
-  if (listNode.size() == 0)
+  if (listNode.size() == 0) 
   {
     Node newNode;
     newNode.init();
