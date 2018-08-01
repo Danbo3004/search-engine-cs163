@@ -17,6 +17,7 @@
 namespace helpers{
 	//std::vector<std::string> stringToVector(std::string);
 	std::vector<std::string> stripStopwords(const std::string, const std::set<std::string>&);
+	void removeDelimiterFromVector(std::vector<std::string>&);
 }
 
 namespace constants{

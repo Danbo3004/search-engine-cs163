@@ -15,6 +15,7 @@ int main(){
 	}
 	fclose(stdin);
 	std::vector<std::string> vstrings = helpers::stripStopwords(s, stopwordsSet);
+	helpers::removeDelimiterFromVector(vstrings);
 	std::copy(vstrings.begin(), vstrings.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 	*///--------------------------------------------------------------------------------
 

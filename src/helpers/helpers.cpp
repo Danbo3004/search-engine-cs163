@@ -2,12 +2,6 @@
 
 namespace helpers{
 	std::vector<std::string> stripStopwords(std::string stripString, const std::set<std::string>& stopwords){
-		//remove grammar delimiters
-		for (std::string::iterator it = stripString.begin(); it != stripString.end(); it++){
-			if (*it == ',' || *it == ';' || *it == '?' || *it == '!') stripString.erase(it);
-
-		}
-
 		//to lowercase
 		std::transform(stripString.begin(), stripString.end(), stripString.begin(), ::tolower);
 
@@ -37,4 +31,16 @@ namespace helpers{
 		return vstring;
 	}
 	*/
+
+	void removeDelimiterFromVector(std::vector<std::string>& stripVector){
+		//remove grammar delimiters
+		for (std::vector<std::string>::iterator it = stripVector.begin(); it != stripVector.end(); it++){
+			if ((*it)[(*it).length()-1] == ',' || (*it)[(*it).length()-1] == ';'
+					|| (*it)[(*it).length()-1] == '?' || (*it)[(*it).length()-1] == '!'
+					|| (*it)[(*it).length()-1] == '.'){
+				(*it).pop_back();
+			}
+
+		}
+	}
 }
