@@ -21,8 +21,11 @@ namespace helpers{
 
 	}
 
-	/*
+
 	std::vector<std::string> stringToVector(std::string stripString){
+		//to lowercase
+		std::transform(stripString.begin(), stripString.end(), stripString.begin(), ::tolower);
+
 		std::stringstream ss(stripString);
 		std::istream_iterator<std::string> begin(ss);
 		std::istream_iterator<std::string> end;
@@ -30,7 +33,7 @@ namespace helpers{
 
 		return vstring;
 	}
-	*/
+
 
 	void removeDelimiterFromVector(std::vector<std::string>& stripVector){
 		//remove grammar delimiters
@@ -43,4 +46,17 @@ namespace helpers{
 
 		}
 	}
+
+	void removeBracketsFromVector(std::vector<std::string>& stripVector){
+
+	}
+
+	std::vector<std::string> stripNakedKeepStopwords(std::string stripString){
+		std::vector<std::string> vstring = stringToVector(stripString);
+		removeDelimiterFromVector(vstring);
+		removeBracketsFromVector(vstring);
+
+		return vstring;
+	}
+
 }
