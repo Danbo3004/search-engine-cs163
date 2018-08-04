@@ -1,7 +1,12 @@
 #include "helpers/helpers.h"
 #include "autotype/AutoTrie.h"
+<<<<<<< HEAD
 // #include "view/View.h"
 #include "inTitle/inTitle.h"
+=======
+#include "view/View.h"
+#include "in-title/in-title.h"
+>>>>>>> search in title operator
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
