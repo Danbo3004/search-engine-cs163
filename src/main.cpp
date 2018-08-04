@@ -1,6 +1,7 @@
 #include "helpers/helpers.h"
 #include "autotype/AutoTrie.h"
 #include "view/View.h"
+#include "in-title/in-title.h"
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include <src/operators/wordopr.h>
