@@ -44,4 +44,13 @@ public:
   void Init();
 };
 
+class CurrentFile
+{
+  private:
+    int indexFile;
+    DataFile file;
+  public:
+    string getWordByIndex(int fileRequest, int wordIndex, bool isTitle);  
+};
+
 #endif

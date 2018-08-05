@@ -2,7 +2,7 @@
 
 int Trie::findNode(string Word)
 {
-  if (listNode.size() == 0) 
+  if (listNode.size() == 0)
   {
     Node newNode;
     newNode.init();
@@ -20,7 +20,7 @@ int Trie::findNode(string Word)
 
 void Trie::insertWord(int indexFile, int position, int isTitle, string word)
 {
-  if (listNode.size() == 0) 
+  if (listNode.size() == 0)
   {
     Node newNode;
     newNode.init();
@@ -71,12 +71,33 @@ vector<FileResult> WordsInFiles::searchWord(string Word)
 
 void WordsInFiles::Init()
 {
-  for (int i = 0; i < 100; ++i) {
-    int indexFile = 9*100+i;
+  for (int i = 0; i < 100; ++i)
+  {
+    int indexFile = 9 * 100 + i;
     DataFile dataFile = readFile(indexFile);
     for (int j = 0; j < dataFile.title.size(); ++j)
       data.insertWord(indexFile, j, 1, dataFile.title[j]);
     for (int j = 0; j < dataFile.content.size(); ++j)
       data.insertWord(indexFile, j, 0, dataFile.content[j]);
+  }
+}
+
+string CurrentFile::getWordByIndex(int fileRequest, int wordIndex, bool isTitle)
+{
+  if (fileRequest != indexFile)
+    file = readFile(fileRequest);
+  if (isTitle)
+  {
+    if (file.title.size() <= wordIndex)
+      return "";
+    else
+      return file.title[wordIndex];
+  }
+  else
+  {
+    if (file.content.size() <= wordIndex)
+      return "";
+    else
+      return file.content[wordIndex];
   }
 }
