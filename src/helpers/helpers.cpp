@@ -85,7 +85,7 @@ DataFile readFile(int fileNumber)
 		content += word + " ";
 	}
 	DataFile data;
-	//data.title = helpers::stripStopwordstitle();
-	//data.content = helpers::stripStopwords(content);
+	data.title = helpers::stringToVector(title);
+	data.content = helpers::stringToVector(content);
 	return data;
 }
