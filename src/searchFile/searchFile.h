@@ -1,7 +1,7 @@
 #ifndef _SEARCH_FILE_
 #define _SEARCH_FILE_
 
-#include "helpers.h"
+#include "../helpers/helpers.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ struct FileResult
 struct Node
 {
   vector<FileResult> files;
-  int pNext[256];
+  int pNext[300];
   void init()
   {
     memset(pNext, -1, sizeof pNext);
@@ -47,7 +47,7 @@ public:
 class CurrentFile
 {
   private:
-    int indexFile;
+    int indexFile = -1;
     DataFile file;
   public:
     string getWordByIndex(int fileRequest, int wordIndex, bool isTitle);  

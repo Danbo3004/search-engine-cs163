@@ -63,17 +63,18 @@ namespace helpers{
 
 string convertNumberToString(int number) 
 {
-	string res = "";
-	while (number > 0) res += (number % 10 + '0'), number /= 10;
-	while (res.length() < 2) res = "0" + res;
+	string res = std::to_string(number);
+	if (res.size() < 2) res  = "0" + res;
 	return res;
 }
 
 DataFile readFile(int fileNumber) 
 {
 	int newsNumber = fileNumber % 100;
-	int groupNumber = fileNumber / 100;
+	// int groupNumber = fileNumber / 100;
+	int groupNumber = 9;
 	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
+	fileName = "./newsdata/" + fileName + ".txt";
 	ifstream fin;
 	fin.open(fileName);
 	string title, content = "";
@@ -86,6 +87,10 @@ DataFile readFile(int fileNumber)
 	}
 	DataFile data;
 	data.title = helpers::stringToVector(title);
+	helpers::removeDelimiterFromVector(data.title);
+	helpers::removeBracketsFromVector(data.title);
 	data.content = helpers::stringToVector(content);
+	helpers::removeDelimiterFromVector(data.content);
+	helpers::removeBracketsFromVector(data.content);
 	return data;
 }

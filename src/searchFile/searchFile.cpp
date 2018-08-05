@@ -12,7 +12,7 @@ int Trie::findNode(string Word)
   int curWord = 0;
   while (cur != -1 && curWord < Word.length())
   {
-    cur = listNode[cur].pNext[Word[curWord]];
+    cur = listNode[cur].pNext[int(Word[curWord])+127];
     curWord++;
   }
   return cur;
@@ -33,16 +33,16 @@ void Trie::insertWord(int indexFile, int position, int isTitle, string word)
   int curWord = 0;
   while (curWord < word.length())
   {
-    if (listNode[cur].pNext[word[curWord]] == -1)
+    if (listNode[cur].pNext[int(word[curWord])+127] == -1)
     {
       Node newNode;
       newNode.init();
       listNode.push_back(newNode);
-      listNode[cur].pNext[word[curWord]] = listNode.size() - 1;
+      listNode[cur].pNext[int(word[curWord])+127] = listNode.size() - 1;
     }
-    cur = listNode[cur].pNext[word[curWord++]];
+    cur = listNode[cur].pNext[int(word[curWord++])+127];
   }
-  if (listNode[cur].files.back().indexFile == indexFile)
+  if (listNode[cur].files.size() != 0 && listNode[cur].files.back().indexFile == indexFile)
   {
     listNode[cur].files.back().listWord.push_back(newWord);
   }
@@ -71,14 +71,18 @@ vector<FileResult> WordsInFiles::searchWord(string Word)
 
 void WordsInFiles::Init()
 {
-  for (int i = 0; i < 100; ++i)
+  for (int g = 1; g <= 25; g++)
   {
-    int indexFile = 9 * 100 + i;
-    DataFile dataFile = readFile(indexFile);
-    for (int j = 0; j < dataFile.title.size(); ++j)
-      data.insertWord(indexFile, j, 1, dataFile.title[j]);
-    for (int j = 0; j < dataFile.content.size(); ++j)
-      data.insertWord(indexFile, j, 0, dataFile.content[j]);
+    for (int i = 0; i < 100; ++i)
+    {
+      int indexFile = g * 100 + i;
+      int indexRead = 9*100 + i;
+      DataFile dataFile = readFile(indexRead);
+      for (int j = 0; j < dataFile.title.size(); ++j)
+        data.insertWord(indexFile, j, 1, dataFile.title[j]);
+      for (int j = 0; j < dataFile.content.size(); ++j)
+        data.insertWord(indexFile, j, 0, dataFile.content[j]);
+    }
   }
 }
 
