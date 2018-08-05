@@ -36,7 +36,7 @@ int main(int argc, char const *argv[])
     WordsInFiles words;
     words.Init();
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+    double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count()/1e6;
 
     begin = std::chrono::steady_clock::now();
     test = operatorWord(words, "chief", "executive", MINUS);
@@ -45,7 +45,7 @@ int main(int argc, char const *argv[])
     test = findWildcard(words, pre, after);
     test = findExact(words, query);
     end = std::chrono::steady_clock::now();
-    double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+    double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count()/1e6;
     // for (int i = 0; i < test.size(); ++i)
     // {
     //     cout << test[i].indexFile << endl;
@@ -57,8 +57,8 @@ int main(int argc, char const *argv[])
     //     }
     //     cout << endl;
     // }
-    cout << test.size() << endl;
-    cout << initTime << "ms" << endl;
-    cout << searchTime << "ms" << endl;
+    // cout << test.size() << endl;
+    cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
+    cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
     return 0;
 }

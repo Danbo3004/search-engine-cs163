@@ -85,7 +85,7 @@ vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
     CurrentFile currentFile;
 
     // currentFile is used for getting  word in the current checking file
-    cout << unionFile.size() << endl;
+    // cout << unionFile.size() << endl;
     for (auto &file : unionFile)
     {
         // for every file having the first word
