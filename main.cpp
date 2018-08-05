@@ -39,24 +39,24 @@ int main(int argc, char const *argv[])
     double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
 
     begin = std::chrono::steady_clock::now();
-    test = operatorWord(words, "the", "and", MINUS);
-    test = operatorWord(words, "the", "and", AND);
-    test = operatorWord(words, "the", "and", OR);
+    test = operatorWord(words, "chief", "executive", MINUS);
+    test = operatorWord(words, "chief", "executive", AND);
+    test = operatorWord(words, "chief", "executive", OR);
     test = findWildcard(words, pre, after);
     test = findExact(words, query);
     end = std::chrono::steady_clock::now();
     double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
-    for (int i = 0; i < test.size(); ++i)
-    {
-        cout << test[i].indexFile << endl;
-        for (int j = 0; j < test[i].listWord.size(); ++j)
-        {
-            cout << test[i].listWord[j].position << " ";
-            cout << ((test[i].listWord[j].isTitle) ? "Title" : "Content") << endl;
-            cout << endl;
-        }
-        cout << endl;
-    }
+    // for (int i = 0; i < test.size(); ++i)
+    // {
+    //     cout << test[i].indexFile << endl;
+    //     for (int j = 0; j < test[i].listWord.size(); ++j)
+    //     {
+    //         cout << test[i].listWord[j].position << " ";
+    //         cout << ((test[i].listWord[j].isTitle) ? "Title" : "Content") << endl;
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
     cout << test.size() << endl;
     cout << initTime << "ms" << endl;
     cout << searchTime << "ms" << endl;

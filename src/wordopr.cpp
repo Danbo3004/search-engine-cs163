@@ -1,4 +1,6 @@
 #include "./wordopr.h"
+#include <chrono>
+
 vector<FileResult> operatorWord(WordsInFiles &words, string a, string b, int operation)
 {
     vector<FileResult> wordA = words.searchWord(a);
@@ -10,40 +12,31 @@ vector<FileResult> operatorWord(WordsInFiles &words, vector<FileResult> a, vecto
 {
     vector<FileResult> res;
     map<int, int> fileCount;
-    for (auto &file : a)
-        fileCount[file.indexFile]++;
-    for (auto &file : b)
-        fileCount[file.indexFile] += 2;
+    map<int, int> indexOfA;
+    map<int, int> indexOfB;
+    for (int i = 0; i < a.size(); i++)
+    {
+        fileCount[a[i].indexFile]++;
+        indexOfA[a[i].indexFile] = i;
+    }
+    for (int i = 0; i < b.size(); i++)
+    {
+        fileCount[b[i].indexFile] += 2;
+        indexOfB[b[i].indexFile] = i;
+    }
     for (auto &file : fileCount)
     {
         int wordCounts = file.second;
         int index = file.first;
-        int indexA, indexB;
-        for (int i = 0; i < a.size(); i++)
-        {
-            if (a[i].indexFile == index)
-            {
-                indexA = i;
-                break;
-            }
-        }
-        for (int i = 0; i < b.size(); i++)
-        {
-            if (b[i].indexFile == index)
-            {
-                indexB = i;
-                break;
-            }
-        }
         if (operation == AND)
         {
             if (wordCounts == 3)
             {
                 FileResult newFile;
                 newFile.indexFile = index;
-                newFile.listWord = a[indexA].listWord;
+                newFile.listWord = a[indexOfA[index]].listWord;
                 newFile.listWord.insert(newFile.listWord.end(),
-                                        b[indexB].listWord.begin(), b[indexB].listWord.end());
+                                        b[indexOfB[index]].listWord.begin(), b[indexOfB[index]].listWord.end());
                 res.push_back(newFile);
             }
         }
@@ -51,9 +44,10 @@ vector<FileResult> operatorWord(WordsInFiles &words, vector<FileResult> a, vecto
         {
             FileResult newFile;
             newFile.indexFile = index;
-            newFile.listWord = a[indexA].listWord;
+            if (indexOfA.find(index) != indexOfA.end())
+                newFile.listWord = a[indexOfA[index]].listWord;
             newFile.listWord.insert(newFile.listWord.end(),
-                                    b[indexB].listWord.begin(), b[indexB].listWord.end());
+                                    b[indexOfB[index]].listWord.begin(), b[indexOfB[index]].listWord.end());
             res.push_back(newFile);
         }
         else if (operation == MINUS)
@@ -62,30 +56,8 @@ vector<FileResult> operatorWord(WordsInFiles &words, vector<FileResult> a, vecto
             {
                 FileResult newFile;
                 newFile.indexFile = index;
-                newFile.listWord = a[indexA].listWord;
+                newFile.listWord = a[indexOfA[index]].listWord;
                 res.push_back(newFile);
-            }
-        }
-        else
-        {
-            if (wordCounts == 3)
-            {
-                int sizeA = a[indexA].listWord.size();
-                FileResult newFile;
-                newFile.indexFile = index;
-                for (auto &w : a[indexA].listWord)
-                {
-                    for (auto &nw : b[indexB].listWord)
-                    {
-                        cout << w.position << " " << nw.position << endl;
-                        if (nw.position <= w.position + WILDCARD_DIS)
-                        {
-                            newFile.listWord.push_back(w);
-                        }
-                    }
-                }
-                if (newFile.listWord.size() != 0)
-                    res.push_back(newFile);
             }
         }
     }
@@ -95,17 +67,26 @@ vector<FileResult> operatorWord(WordsInFiles &words, vector<FileResult> a, vecto
 vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
 {
     vector<FileResult> res;
+    // double initTime = 0;
     // if the string search is empty, then return empty result
     if (words.size() == 0)
         return res;
 
     //search the occurrences if files of the first word
-    vector<FileResult> firstWordFile = wordsInFile.searchWord(words[0]);
+    vector<FileResult> unionFile = wordsInFile.searchWord(words[0]);
     if (words.size() == 1)
-        return firstWordFile;
+        return unionFile;
+    for (int i = 1; i < words.size(); i++)
+    {
+        vector<FileResult> next = wordsInFile.searchWord(words[i]);
+        unionFile = operatorWord(wordsInFile, unionFile, next, AND);
+    }
 
     CurrentFile currentFile;
-    for (auto &file : firstWordFile)
+
+    // currentFile is used for getting  word in the current checking file
+    cout << unionFile.size() << endl;
+    for (auto &file : unionFile)
     {
         // for every file having the first word
         // go to every position of first word
@@ -118,8 +99,6 @@ vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
 
         int fileIndex = file.indexFile;
 
-        // currentFile is used for getting the word in the current checking file
-
         // cout << "File Index: " << fileIndex << endl;
         for (auto &word : file.listWord)
         {
@@ -129,9 +108,13 @@ vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
             // cout << "Word Index: " << wordIndex << endl;
 
             // checking for matching exactly
-            for (int i = 1; i < words.size(); i++)
+            for (int i = 0; i < words.size(); i++)
             {
+
+                // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 string temp = currentFile.getWordByIndex(fileIndex, wordIndex + i, false);
+                // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+                // initTime += std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
                 // cout << temp << " ";
                 if (words[i] != temp)
                 {
@@ -151,6 +134,7 @@ vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
         if (result.listWord.size() != 0)
             res.push_back(result);
     }
+    // std::cout << "Total time for find: " << initTime << endl;
 
     return res;
 }
@@ -163,10 +147,48 @@ vector<FileResult> findWildcard(WordsInFiles &words, vector<string> pre, vector<
         return findExact(words, pre);
     else
     {
+        vector<FileResult> res;
         vector<FileResult> preWC = findExact(words, pre);
-        cout << preWC.size() << endl;
         vector<FileResult> afterWC = findExact(words, after);
-        cout << afterWC.size() << endl;
-        return operatorWord(words, preWC, afterWC, ORDER_AND);
+        map<int, int> fileCount;
+        map<int, int> indexFirst;
+        map<int, int> indexSecond;
+        for (int i = 0; i < preWC.size(); i++)
+        {
+            fileCount[preWC[i].indexFile]++;
+            indexFirst[preWC[i].indexFile] = i;
+        }
+
+        for (int i = 0; i < afterWC.size(); i++)
+        {
+            fileCount[afterWC[i].indexFile]++;
+            indexSecond[afterWC[i].indexFile] = i;
+        }
+        for (auto &file : fileCount)
+        {
+            if (file.second == 2)
+            {
+                int index = file.first;
+                FileResult newFile;
+                newFile.indexFile = index;
+                // cout << index << endl;
+                // cout << indexFirst[index] << " " << indexSecond[index] << endl;
+                vector<Word> prePos = preWC[indexFirst[index]].listWord;
+                vector<Word> postPos = afterWC[indexSecond[index]].listWord;
+                for (auto &preW : prePos)
+                {
+                    for (auto &postW : postPos)
+                    {
+                        if (preW.position + pre.size() + WILDCARD_DIS > postW.position)
+                        {
+                            newFile.listWord.push_back(preW);
+                        }
+                    }
+                }
+                if (newFile.listWord.size() != 0)
+                    res.push_back(newFile);
+            }
+        }
+        return res;
     }
 }

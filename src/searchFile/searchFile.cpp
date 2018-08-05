@@ -71,7 +71,7 @@ vector<FileResult> WordsInFiles::searchWord(string Word)
 
 void WordsInFiles::Init()
 {
-  for (int g = 1; g <= 25; g++)
+  for (int g = 0; g < 25; g++)
   {
     for (int i = 0; i < 100; ++i)
     {
@@ -90,6 +90,7 @@ string CurrentFile::getWordByIndex(int fileRequest, int wordIndex, bool isTitle)
 {
   if (fileRequest != indexFile)
     file = readFile(fileRequest);
+  indexFile = fileRequest;
   if (isTitle)
   {
     if (file.title.size() <= wordIndex)
