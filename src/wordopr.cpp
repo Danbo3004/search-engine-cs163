@@ -1,6 +1,16 @@
 #include "./wordopr.h"
 #include <chrono>
 
+vector<FileResult> andOperator(WordsInFiles& words, string a, string b) {
+    return operatorWord(words, a, b, AND);
+}
+
+vector<FileResult> orOperator(WordsInFiles& words, string a, string b) {
+    return operatorWord(words, a, b, OR);
+}
+vector<FileResult> minusOperator(WordsInFiles& words, string a, string b) {
+    return operatorWord(words, a, b, MINUS);
+}
 vector<FileResult> operatorWord(WordsInFiles &words, string a, string b, int operation)
 {
     vector<FileResult> wordA = words.searchWord(a);
