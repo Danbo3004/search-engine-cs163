@@ -71,19 +71,19 @@ vector<FileResult> WordsInFiles::searchWord(string Word)
 
 void WordsInFiles::Init()
 {
-  for (int g = 0; g < 25; g++)
-  {
+  // for (int g = 0; g < 25; g++)
+  // {
     for (int i = 0; i < 100; ++i)
     {
-      int indexFile = g * 100 + i;
-      int indexRead = 9*100 + i;
-      DataFile dataFile = readFile(indexRead);
+      int indexFile = 9 * 100 + i;
+      // int indexRead = 9*100 + i;
+      DataFile dataFile = readFile(indexFile);
       for (int j = 0; j < dataFile.title.size(); ++j)
         data.insertWord(indexFile, j, 1, dataFile.title[j]);
       for (int j = 0; j < dataFile.content.size(); ++j)
         data.insertWord(indexFile, j, 0, dataFile.content[j]);
     }
-  }
+  // }
 }
 
 string CurrentFile::getWordByIndex(int fileRequest, int wordIndex, bool isTitle)
