@@ -48,9 +48,10 @@ vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> wo
     }
   }
   sort(res.begin(), res.end(), cmpByNumber);
-  vector <FileResult> FiveRes;
-  for (int i = 0; i < (int) res.size(); ++i){
-    FiveRes.push_back(res[i]);
+  vector<FileResult> fiveRes;
+  for (int i = 0; i < min(5, (int)res.size()); ++i)
+  {
+    fiveRes.push_back(res[i]);
   }
-  return FiveRes;
+  return fiveRes;
 }
