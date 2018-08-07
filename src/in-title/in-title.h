@@ -1,28 +1,18 @@
 #ifndef in_title_h
 #define in_title_h
 
-#pragma once
 #include <vector>
 #include <string>
 #include <fstream>
-#include "helpers.h"
-#include "searchFile.h"
+#include <algorithm>
+#include <map>
+#include "../helpers/helpers.h"
+#include "../searchFile/searchFile.h"
 
 using namespace std;
 
-struct responseFile {
-    int indexFile;
-    string description, title;
-    responseFile() {
-        description = "";
-        title = "";
-    }
-};
-
-vector <responseFile> searchInTitle(string word);
+vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> words);
 
 bool cmpByNumber(FileResult a, FileResult b);
-
-responseFile convertResponseToFile(FileResult response, bool searchInTitle);
 
 #endif
