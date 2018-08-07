@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #include "./wordopr.h"
+=======
+#include "wordopr.h"
+>>>>>>> Merge branch 'in-title-operator' of https://github.com/Danbo3004/search-engine-cs163 into in-title-operator
 #include <chrono>
 
 vector<FileResult> andOperator(WordsInFiles& words, string a, string b) {
