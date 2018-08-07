@@ -5,6 +5,7 @@
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
 #include "searchFile/searchFile.h"
+#include "synonym/synonym.h"
 #include <chrono>
 #include <iomanip>
 
