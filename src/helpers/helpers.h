@@ -36,7 +36,6 @@ struct DataFile {
 
 DataFile readFile(int fileNumber);
 
+string convertNumberToString(int number);
 
 #endif
-
-
