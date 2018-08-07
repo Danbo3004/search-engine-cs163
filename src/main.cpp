@@ -3,7 +3,7 @@
 #include "view/View.h"
 #include <stdio.h>
 #include <bits/stdc++.h>
-#include <src/operators/wordopr.h>
+#include "operators/wordopr.h"
 #include "searchFile/searchFile.h"
 #include <chrono>
 #include <iomanip>
