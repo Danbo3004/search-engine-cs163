@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 #include "wordopr.h"
-=======
-#include "./wordopr.h"
->>>>>>> 5a1c3e284eaee3094f6e7facae051ba5b65013d7
 #include <chrono>
 
 vector<FileResult> andOperator(WordsInFiles& words, string a, string b) {
