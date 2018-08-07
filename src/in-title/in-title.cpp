@@ -1,62 +1,56 @@
 #include "in-title.h"
 
-WordsInFiles TmpData;
-
-bool cmpByNumber(FileResult a, FileResult b){
-    return a.listWord.size() > b.listWord.size();
+bool cmpByNumber(FileResult a, FileResult b)
+{
+  return a.listWord.size() > b.listWord.size();
 }
 
-vector <responseFile> searchInTitle(string word){
-    vector <FileResult> responses = TmpData.searchWord(word);
-    vector <FileResult> inTitleResponses;
-    for (int i = 0; i < (int)responses.size(); ++i){
-        FileResult file = responses[i];
-        for (int j = 0; j < (int)file.listWord.size(); ++i){
-            Word w = file.listWord[i];
-            if (w.isTitle) {
-                inTitleResponses.push_back(responses[i]);
-                break;
-            }
+vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> words)
+{
+  map <int, int> fileCount;
+  map <int, int> filePos;
+  vector<FileResult> res;
+  for (int i = 0; i < (int)words.size(); ++i)
+  {
+    string word = words[i];
+    vector<FileResult> found = wordsInFiles.searchWord(word);
+    for (int j = 0; j < (int)found.size(); ++j)
+    {
+      FileResult file = found[j];
+      bool inTitle = false;
+      for (int k = 0; k < (int)file.listWord.size(); ++k)
+      {
+        Word tmp = file.listWord[k];
+        if (tmp.isTitle)
+        {
+          inTitle = true;
+          break;
         }
+      }
+      if (inTitle){
+        if (!fileCount.count(file.indexFile)){
+          if (i != 0) break;
+          fileCount[file.indexFile] = 1;
+          filePos[file.indexFile] = res.size();
+          FileResult newFile;
+          newFile.indexFile = file.indexFile;
+          newFile.listWord.push_back(file.listWord[0]);
+          res.push_back(newFile);
+        }
+        else {
+          ++fileCount[file.indexFile];
+          int pos = filePos[file.indexFile];
+          FileResult newFile = res[pos];
+          newFile.listWord.push_back(file.listWord[0]);
+          res[pos] = newFile;
+        }
+      }
     }
-    sort(inTitleResponses.begin(), inTitleResponses.end(), cmpByNumber);
-    vector <responseFile> files;
-    for (int i = 0; i < min(5, (int)inTitleResponses.size()); ++i){
-        FileResult response = inTitleResponses[i];
-        files.push_back(convertResponseToFile(response, true));
-    }
-    return files;
+  }
+  sort(res.begin(), res.end(), cmpByNumber);
+  vector <FileResult> FiveRes;
+  for (int i = 0; i < (int) res.size(); ++i){
+    FiveRes.push_back(res[i]);
+  }
+  return FiveRes;
 }
-
-responseFile convertResponseToFile(FileResult response, bool searchInTitle){
-    DataFile file = readFile(response.indexFile);
-    responseFile res;
-    res.indexFile = response.indexFile;
-    for (int i = 0; i < (int)file.title.size(); ++i){
-        res.title += file.title[i];
-    }
-    int firstInContent = -1;
-    for (int i = 0; i < response.listWord.size(); ++i){
-        Word word = response.listWord[i];
-        if (!word.isTitle){
-            firstInContent = i;
-            break;
-        }
-    }
-    if (searchInTitle || firstInContent == -1){
-        for (int i = 0; i < min(20, (int)file.content.size()); ++i){
-            res.description += file.content[i];
-        }
-    }
-    else {
-        int pos = response.listWord[firstInContent].position;
-        for (int i = max(0, pos - 10); i < min(pos + 10, (int)file.content.size()); ++i){
-            res.description += file.content[i];
-        }
-    }
-    return res;
-}
-
-
-
-
