@@ -21,10 +21,9 @@ using namespace std;
 namespace helpers{
 	std::vector<std::string> stringToVector(std::string);
 	std::vector<std::string> stripStopwords(const std::string, const std::set<std::string>&);
-	void removeDelimiterFromVector(std::vector<std::string>&);
-	void removeBracketsFromVector(std::vector<std::string> &);
+	void removeNonOperatorFromVector(std::vector<std::string>&);
+	void removeOddCharFromVector(std::vector<std::string> &);
 	std::vector<std::string> stripNakedKeepStopwords(std::string);
-	std::vector<std::string> stripNakedNoStopwords(std::string);
 }
 
 namespace constants{

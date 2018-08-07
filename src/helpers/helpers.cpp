@@ -2,14 +2,9 @@
 
 namespace helpers{
 	std::vector<std::string> stripStopwords(std::string stripString, const std::set<std::string>& stopwords){
-		//to lowercase
-		std::transform(stripString.begin(), stripString.end(), stripString.begin(), ::tolower);
+		std::vector<std::string> vstring = stringToVector(stripString);
 
-		//to vector
-		std::stringstream ss(stripString);
-		std::istream_iterator<std::string> begin(ss);
-		std::istream_iterator<std::string> end;
-		std::vector<std::string> vstring(begin, end);
+		removeNonOperatorFromVector(vstring);
 
 		std::vector<std::string>::iterator it = vstring.begin();
 		while(it != vstring.end()){
@@ -35,26 +30,62 @@ namespace helpers{
 	}
 
 
-	void removeDelimiterFromVector(std::vector<std::string>& stripVector){
-		//remove grammar delimiters
+	void removeNonOperatorFromVector(std::vector<std::string>& stripVector){
+		//remove everything except operator
 		for (std::vector<std::string>::iterator it = stripVector.begin(); it != stripVector.end(); it++){
-			if ((*it)[(*it).length()-1] == ',' || (*it)[(*it).length()-1] == ';'
-					|| (*it)[(*it).length()-1] == '?' || (*it)[(*it).length()-1] == '!'
-					|| (*it)[(*it).length()-1] == '.'){
+			while (!(
+					('A'<= (*it)[(*it).length()-1] && (*it)[(*it).length()-1] <= 'Z')
+					|| ('a'<= (*it)[(*it).length()-1] && (*it)[(*it).length()-1] <= 'z')
+					|| ('0'<= (*it)[(*it).length()-1] && (*it)[(*it).length()-1] <= '9')
+					|| ((*it)[(*it).length()-1] == 34 || (*it)[(*it).length()-1] == '*')
+					)){
 				(*it).pop_back();
+			}
+
+			while (!(
+						('A'<=(*it)[0] && (*it)[0] <= 'Z')
+						|| ('a'<=(*it)[0] && (*it)[0] <= 'z')
+						|| ('0'<=(*it)[0] && (*it)[0] <= '9')
+						|| (*it)[0] == '$'
+						|| (*it)[0] == 34
+						|| (*it)[0] == '*'
+						|| (*it)[0] == '+'
+						|| (*it)[0] == '-'
+						|| (*it)[0] == '~'
+					)){
+				(*it).erase(0,1);
 			}
 
 		}
 	}
 
-	void removeBracketsFromVector(std::vector<std::string>& stripVector){
+	void removeOddCharFromVector(std::vector<std::string>& stripVector){
+		//remove odd leading and trailing character
+		for (std::vector<std::string>::iterator it = stripVector.begin(); it != stripVector.end(); it++){
+			while (!(
+					('A'<(*it)[(*it).length()-1] && (*it)[(*it).length()-1] < 'Z')
+					|| ('a'<(*it)[(*it).length()-1] && (*it)[(*it).length()-1] < 'z')
+					|| ('0'<(*it)[(*it).length()-1] && (*it)[(*it).length()-1] < '9')
+					)){
+				(*it).pop_back();
+			}
+
+			while (!(
+					('A'<(*it)[0] && (*it)[0] < 'Z')
+					|| ('a'<(*it)[0] && (*it)[0] < 'z')
+					|| ('0'<(*it)[0] && (*it)[0] < '9')
+					|| (*it)[0] == '$'
+				)){
+				(*it).erase(0,1);
+			}
+
+		}
 
 	}
 
 	std::vector<std::string> stripNakedKeepStopwords(std::string stripString){
 		std::vector<std::string> vstring = stringToVector(stripString);
-		removeDelimiterFromVector(vstring);
-		removeBracketsFromVector(vstring);
+		removeOddCharFromVector(vstring);
 
 		return vstring;
 	}
@@ -86,11 +117,7 @@ DataFile readFile(int fileNumber)
 		content += word + " ";
 	}
 	DataFile data;
-	data.title = helpers::stringToVector(title);
-	helpers::removeDelimiterFromVector(data.title);
-	helpers::removeBracketsFromVector(data.title);
-	data.content = helpers::stringToVector(content);
-	helpers::removeDelimiterFromVector(data.content);
-	helpers::removeBracketsFromVector(data.content);
+	data.title = helpers::stripNakedKeepStopwords(title);
+	data.content = helpers::stripNakedKeepStopwords(content);
 	return data;
 }

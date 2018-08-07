@@ -1,8 +1,8 @@
 #if !defined(WORDOPR_H)
 #define WORDOPR_H
 #include <bits/stdc++.h>
-#include "./helpers/helpers.h"
-#include "./searchFile/searchFile.h"
+#include "../helpers/helpers.h"
+#include "../searchFile/searchFile.h"
 
 using std::string;
 using std::vector;

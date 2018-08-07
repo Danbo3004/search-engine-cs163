@@ -1,4 +1,4 @@
-#include "./wordopr.h"
+#include <src/operators/wordopr.h>
 #include <chrono>
 
 vector<FileResult> andOperator(WordsInFiles& words, string a, string b) {

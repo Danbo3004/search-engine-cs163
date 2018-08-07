@@ -1,7 +1,3 @@
-//ID: 1751001
-//Name: Nguyen Hien Tuan Duy
-//Exercise
-
 #ifndef VIEW_H
 #define VIEW_H
 
@@ -11,19 +7,22 @@
 #include <climits>
 #include <string>
 #include <set>
+#include <vector>
 
-/*/-------------not cross-platform-----------------------------------------------------------------------------------------
+//-------------not cross-platform-----------------------------------------------------------------------------------------
 #include <windows.h>
 #include <conio.h>
-*///-----------------------------------------------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------------------------------------------------
 
 
 #include "../helpers/helpers.h"
+#include "../autotype/AutoTrie.h"
 
 namespace view{
 	class View{
 	private:
 		std::set<std::string> stopwordsSet;
+		AutoTrie trie;
 	public:
 		View();
 		void searchView();
@@ -31,6 +30,9 @@ namespace view{
 		void gotoxy(int , int );
 		void time();
 		void typeInput(std::string& field, const int& fieldLim = INT_MAX);
+		COORD GetConsoleCursorPosition(HANDLE);
+		void title();
+		void history(const string&, std::vector<std::string>&);
 	};
 
 }
