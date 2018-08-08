@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include <iostream>
 
 namespace helpers{
 	std::vector<std::string> stripStopwords(std::string stripString, const std::set<std::string>& stopwords){
@@ -141,4 +142,13 @@ DataFile readFile(int fileNumber)
 	data.title = helpers::stripNakedKeepStopwords(title);
 	data.content = helpers::stripNakedKeepStopwords(content);
 	return data;
+}
+
+void log(std::string s) {
+	ofstream fout(constants::LOG_FILE_PATH, std::ios_base::app);
+	if (!fout) {
+		cout << "File error" << endl;
+		return;
+	}
+	fout << s << endl;
 }

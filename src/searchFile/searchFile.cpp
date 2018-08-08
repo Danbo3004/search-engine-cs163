@@ -1,5 +1,4 @@
 #include "searchFile.h"
-
 int Trie::findNode(string Word)
 {
   if (listNode.size() == 0)
@@ -81,6 +80,8 @@ void WordsInFiles::Init()
     {
       int indexFile = g * 100 + i;
       // int indexRead = 9*100 + i;
+      // log(std::to_string(indexFile));
+      // log("");
       // cout << indexFile << ": " << endl;
       DataFile dataFile = readFile(indexFile);
       // cout << dataFile.content.size() << "  " << dataFile.title.size() << endl;
