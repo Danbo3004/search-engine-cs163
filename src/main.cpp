@@ -1,6 +1,6 @@
 #include "helpers/helpers.h"
 #include "autotype/AutoTrie.h"
-#include "view/View.h"
+// #include "view/View.h"
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
@@ -108,8 +108,10 @@ int main(){
 	cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
 	 *///--------------------------------------------------------------------------------
 
-	view::View facade;
-	facade.searchView();
+	// view::View facade;
+	// facade.searchView();
 
+	WordsInFiles words;
+	words.Init();
 	return 0;
 }

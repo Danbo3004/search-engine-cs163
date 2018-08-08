@@ -122,10 +122,10 @@ string convertNumberToString(int number)
 DataFile readFile(int fileNumber) 
 {
 	int newsNumber = fileNumber % 100;
-	// int groupNumber = fileNumber / 100;
-	int groupNumber = 9;
+	int groupNumber = fileNumber / 100;
+	// int groupNumber = 1;
 	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
-	fileName = "./newsdata/" + fileName + ".txt";
+	fileName = "../newsdatatest/" + fileName + ".txt";
 	ifstream fin;
 	fin.open(fileName);
 	string title, content = "";
