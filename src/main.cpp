@@ -69,11 +69,13 @@ int main()
 		"who"};
 	vector<string> after{"same", "number"};
 	begin = std::chrono::steady_clock::now();
-	test = operatorWord(words, "chief", "executive", MINUS);
-	test = operatorWord(words, "chief", "executive", AND);
-	test = operatorWord(words, "chief", "executive", OR);
-	test = findWildcard(words, pre, after);
-	test = findExact(words, query);
+	// for (int i = 0; i < 20; i++) {
+		// test = operatorWord(words, "chief", "executive", MINUS);
+		test = operatorWord(words, "chief", "executive", AND);
+		test = operatorWord(words, "chief", "executive", OR);
+		// test = findWildcard(words, pre, after);
+		// test = findExact(words, query);
+	// }
 	end = std::chrono::steady_clock::now();
 	double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 	CurrentFile currentFile;
