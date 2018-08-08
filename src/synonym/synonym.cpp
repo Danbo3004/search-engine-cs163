@@ -29,7 +29,7 @@ vector <string> getSynonyms(string word) {
 }
 
 // sort by number of presences of word
-bool cmpByNumber(FileResult a, FileResult b){
+bool cmpSynonymByNumber(FileResult a, FileResult b){
    return a.listWord.size() > b.listWord.size();
 }
 
@@ -44,7 +44,7 @@ vector <FileResult> searchSynonym(WordsInFiles &wordsInFiles, string word){
        responses.insert(responses.end(), found.begin(), found.end());
    }
    
-   sort(responses.begin(), responses.end(), cmpByNumber);
+   sort(responses.begin(), responses.end(), cmpSynonymByNumber);
    
    vector <FileResult> res;
    // get 5 best FileResult

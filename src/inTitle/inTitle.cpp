@@ -1,6 +1,6 @@
 #include "./inTitle.h"
 
-bool cmpByNumber(FileResult a, FileResult b)
+bool cmpInTitleByNumber(FileResult a, FileResult b)
 {
   return a.listWord.size() > b.listWord.size();
 }
@@ -48,6 +48,8 @@ vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> wo
     }
   }
 
+  cout << "Found: " << res.size() << "\n";
+
   // Including all words
   vector <FileResult> filterRes;
   int len = words.size();
@@ -58,7 +60,7 @@ vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> wo
     }
   }
 
-  sort(filterRes.begin(), filterRes.end(), cmpByNumber);
+  sort(filterRes.begin(), filterRes.end(), cmpInTitleByNumber);
   vector<FileResult> fiveRes;
   for (int i = 0; i < min(5, (int)filterRes.size()); ++i)
   {

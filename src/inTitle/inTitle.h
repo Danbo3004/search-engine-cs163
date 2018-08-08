@@ -13,6 +13,6 @@ using namespace std;
 
 vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> words);
 
-bool cmpByNumber(FileResult a, FileResult b);
+bool cmpInTitleByNumber(FileResult a, FileResult b);
 
 #endif

@@ -65,6 +65,7 @@ int main()
 	double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 	vector<FileResult> test;
 	vector<string> query{"uber"};
+	vector<string> queryTitle{"uber"};
 	vector<string> pre{
 		"client",
 		"who"};
@@ -72,10 +73,14 @@ int main()
 	begin = std::chrono::steady_clock::now();
 	// for (int i = 0; i < 20; i++) {
 		// test = operatorWord(words, "chief", "executive", MINUS);
-		test = operatorWord(words, "chief", "asdsadasdasd", AND);
+		// test = operatorWord(words, "chief", "asdsadasdasd", AND);
 		// test = operatorWord(words, "chief", "executive", OR);
 		// test = findWildcard(words, pre, after);
 		// test = findExact(words, query);
+		// test = searchSynonym(words, "account");
+		// test = searchInTitle(words, queryTitle);
+		// test = searchPrice(words, "fish", "$17");
+		test = searchInRange(words, "camera", "$1", "$20");
 	// }
 	end = std::chrono::steady_clock::now();
 	double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;

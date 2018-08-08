@@ -14,6 +14,6 @@ vector <string> getSynonyms(string word);
 
 vector <FileResult> searchSynonym(WordsInFiles &wordsInFiles, string word);
 
-bool cmpByNumber(FileResult a, FileResult b);
+bool cmpSynonymByNumber(FileResult a, FileResult b);
 
 #endif /* synonym_h */
