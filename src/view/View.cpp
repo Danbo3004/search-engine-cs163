@@ -80,6 +80,7 @@ namespace view{
 			cout<<results[i].listWord.size()<<endl;
 
 			cout<<"Title: ";
+			SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 6);
 			for (int j = 0; j<std::min(20,(int)resFile.title.size()); j++){
 				if (std::find(searchQuery.begin(), searchQuery.end(), resFile.title[j]) != searchQuery.end()){
 					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 2);
@@ -90,13 +91,17 @@ namespace view{
 					cout << resFile.title[j]<<" ";
 				}
 			}
+			SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 15);
 
 			cout << endl;
 
 			cout << "Content: ";
 			for (int j = 0; j<(int)resFile.content.size(); j++){
-				int tmp = j+resFile.title.size();
+				int tmp = j;//+resFile.title.size();
 				if (std::find(searchQuery.begin(), searchQuery.end(), resFile.content[j]) != searchQuery.end()){
+				//if (std::find_if(results[i].listWord.begin(), results[i].listWord.end(),[&tmp](const Word& w){
+				//																			 return w.position == tmp;
+				//																			 }) != results[i].listWord.end()){
 					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 2);
 					cout << resFile.content[j]<<" ";
 					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 15);
