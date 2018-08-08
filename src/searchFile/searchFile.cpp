@@ -1,7 +1,7 @@
 #include "searchFile.h"
 int Trie::findNode(string Word)
 {
-  if (listNode.size() == 0)
+  if (listNode.size() == 0) 
   {
     Node newNode;
     newNode.init();
@@ -85,6 +85,8 @@ void WordsInFiles::Init()
       // cout << indexFile << ": " << endl;
       DataFile dataFile = readFile(indexFile);
       // cout << dataFile.content.size() << "  " << dataFile.title.size() << endl;
+      // cout << indexFile << ": ";
+      // cout << dataFile.content.size () << "  " << dataFile.title.size() << endl;
       for (int j = 0; j < dataFile.title.size(); ++j)
         data.insertWord(indexFile, j, 1, dataFile.title[j]);
       for (int j = 0; j < dataFile.content.size(); ++j)

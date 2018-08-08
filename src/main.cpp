@@ -1,6 +1,7 @@
 #include "helpers/helpers.h"
 #include "autotype/AutoTrie.h"
 // #include "view/View.h"
+#include "inTitle/inTitle.h"
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
@@ -35,7 +36,6 @@ int main()
 	*/
 	//--------------------------------------------------------------------------------
 
-	/*//-------------------------------Tam+Thuc's test-----------------------------
 	// int index = 1000;
 	// CurrentFile cf;
 	// for (int  i = 1; i < 10; i++) {
@@ -52,7 +52,6 @@ int main()
 	//     cout << s << " ";
 	// }
 	// cout << "--------------------------------------------------" << endl;
-	 */
 	//--------------------------------------------------------------------------------
 
 	// view::View facade;
@@ -63,7 +62,7 @@ int main()
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 	vector<FileResult> test;
-	vector<string> query{"chief", "executive"};
+	vector<string> query{"uber"};
 	vector<string> pre{
 		"client",
 		"who"};
