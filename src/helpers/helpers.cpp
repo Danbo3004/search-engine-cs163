@@ -29,21 +29,32 @@ namespace helpers{
 		return vstring;
 	}
 
+	std::vector<std::string> stringToRawVector(std::string stripString){
+		std::stringstream ss(stripString);
+		std::istream_iterator<std::string> begin(ss);
+		std::istream_iterator<std::string> end;
+		std::vector<std::string> vstring(begin, end);
+
+		return vstring;
+	}
 
 	void removeNonOperatorFromVector(std::vector<std::string>& stripVector){
 		//remove everything except operator
-		for (std::vector<std::string>::iterator it = stripVector.begin(); it != stripVector.end(); it++){
-			while (!(
-					('A'<= (*it)[(*it).length()-1] && (*it)[(*it).length()-1] <= 'Z')
-					|| ('a'<= (*it)[(*it).length()-1] && (*it)[(*it).length()-1] <= 'z')
-					|| ('0'<= (*it)[(*it).length()-1] && (*it)[(*it).length()-1] <= '9')
-					|| ((*it)[(*it).length()-1] == 34 || (*it)[(*it).length()-1] == '*')
+		std::vector<std::string>::iterator it = stripVector.begin();
+		while (it != stripVector.end()){
+			while (!(	it == stripVector.end()
+						|| (*it).length() <= 0
+						|| ('A'<= (*it).back() && (*it).back() <= 'Z')
+						|| ('a'<= (*it).back() && (*it).back() <= 'z')
+						|| ('0'<= (*it).back() && (*it).back() <= '9')
+						|| ((*it).back() == 34 || (*it).back() == '*')
 					)){
 				(*it).pop_back();
 			}
 
-			while (!(
-						('A'<=(*it)[0] && (*it)[0] <= 'Z')
+			while (!(	it == stripVector.end()
+						|| (*it).length() <= 0
+						|| ('A'<=(*it)[0] && (*it)[0] <= 'Z')
 						|| ('a'<=(*it)[0] && (*it)[0] <= 'z')
 						|| ('0'<=(*it)[0] && (*it)[0] <= '9')
 						|| (*it)[0] == '$'
@@ -56,34 +67,43 @@ namespace helpers{
 				(*it).erase(0,1);
 			}
 
+			if (it != stripVector.end()) it++;
+
 		}
 	}
 
 	void removeOddCharFromVector(std::vector<std::string>& stripVector){
 		//remove odd leading and trailing character
-		for (std::vector<std::string>::iterator it = stripVector.begin(); it != stripVector.end(); it++){
-			while (!(
-					('A'<(*it)[(*it).length()-1] && (*it)[(*it).length()-1] < 'Z')
-					|| ('a'<(*it)[(*it).length()-1] && (*it)[(*it).length()-1] < 'z')
-					|| ('0'<(*it)[(*it).length()-1] && (*it)[(*it).length()-1] < '9')
+		std::vector<std::string>::iterator it = stripVector.begin();
+		while (it != stripVector.end()){
+			while (!(	it == stripVector.end()
+						|| (*it).length() <= 0
+						|| ('A'<= (*it).back() && (*it).back() <= 'Z')
+						|| ('a'<=(*it).back() && (*it).back() <= 'z')
+						|| ('0'<=(*it).back() && (*it).back() <= '9')
 					)){
 				(*it).pop_back();
 			}
 
-			while (!(
-					('A'<(*it)[0] && (*it)[0] < 'Z')
-					|| ('a'<(*it)[0] && (*it)[0] < 'z')
-					|| ('0'<(*it)[0] && (*it)[0] < '9')
-					|| (*it)[0] == '$'
+			while (!(	it == stripVector.end()
+						|| (*it).length() <= 0
+						|| ('A'<=(*it)[0] && (*it)[0] <= 'Z')
+						|| ('a'<=(*it)[0] && (*it)[0] <= 'z')
+						|| ('0'<=(*it)[0] && (*it)[0] <= '9')
+						|| (*it)[0] == '$'
 				)){
 				(*it).erase(0,1);
 			}
 
+			if (it != stripVector.end()) it++;
 		}
 
 	}
 
+
+
 	std::vector<std::string> stripNakedKeepStopwords(std::string stripString){
+		//std::string newString = removeOddCharFromString(stripString);
 		std::vector<std::string> vstring = stringToVector(stripString);
 		removeOddCharFromVector(vstring);
 
