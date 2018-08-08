@@ -168,33 +168,7 @@ namespace view{
 			 phraseA = cleanString.front();
 			 phraseB = cleanString.back();
 			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
-			 if (results.size()){
-
-				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
-
-					 FileResult resi = *resIt;
-					 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&resi](const FileResult& file){
-																			 return file.indexFile == resi.indexFile;
-																			 });
-					 cout << s << endl;
-					 if(vFileResultIter == tmp.end()){
-						 results.erase(resIt);
-					 }
-					 else{
-						 //merging
-						 std::set_intersection(resIt->listWord.begin(), resIt->listWord.end(),
-												 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
-												 [](const Word &a, const Word &b) {
-													return a.position < b.position;
-												});
-					 }
-					 if (resIt == results.end()) break;
-				 }
-
-			 }
-			 else{
-				 results = tmp;
-			 }
+			 intersectVector(results,tmp);
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
 
@@ -210,22 +184,7 @@ namespace view{
 			 phraseA = cleanString.front();
 			 phraseB = cleanString.back();
 			 tmp = orOperator(wordsInFiles,phraseA,phraseB);
-			 if (results.size()){
-
-				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
-					 //merging
-					 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
-											 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
-											 [](const Word &a, const Word &b) {
-												return a.position < b.position;
-											});
-					 if (resIt == results.end()) break;
-				 }
-
-			 }
-			 else{
-				 results = tmp;
-			 }
+			 unionVector(results,tmp);
 		}
 		//------------------------------------------------------------------------------------------------------
 
@@ -243,33 +202,18 @@ namespace view{
 			 std::vector<std::string> vectorB = helpers::stripStopwords(phraseB, stopwordsSet);
 
 			 tmp = findWildcard(wordsInFiles,vectorA,vectorB);
-			 if (results.size()){
-
-				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
-					 //merging
-					 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
-											 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
-											 [](const Word &a, const Word &b) {
-												return a.position < b.position;
-											});
-					 if (resIt == results.end()) break;
-				 }
-
-			 }
-			 else{
-				 results = tmp;
-			 }
+			 unionVector(results,tmp);
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
 
 		//-------------EXACT-----------------------------------------------------------------------------------------
-		if(vstring.size() == 1 || (vstring.front().front() == 34 && vstring.back().back() == 34)){
+	    if(vstring.size() == 1 || (vstring.front().front() == 34 && vstring.back().back() == 34)){
 			called = true;
 			cleanString = helpers::stripNakedKeepStopwords(query);
 			results = findExact(wordsInFiles, cleanString);
 		}
-		///-----------------------------------------------------------------------------------------------------------------------
 
+		///-----------------------------------------------------------------------------------------------------------------------
 
 		//-------------DEFAULT AND PLUS-----------------------------------------------------------------------------------------
 		for(it = vstring.begin(); it != vstring.end() - 1; it++){
@@ -282,26 +226,17 @@ namespace view{
 			 phraseB = cleanString.back();
 
 			 if (phraseA.front() == '+') phraseA.erase(0,1);
-			 if (phraseB.front() == '+') phraseB.erase(0,1);
-			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
-			 if (results.size()){
-				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
-					 //merging
-					 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
-											 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
-											 [](const Word &a, const Word &b) {
-												return a.position < b.position;
-											});
-					 if (resIt == results.end()) break;
-				 }
+			 if (phraseB.front() == '+') phraseB.erase(0,1);
+			 intersectVector(results,tmp);
 
-			 }
-			 else{
-				 results = tmp;
-			 }
+
+
 			 cout<<phraseA<<endl<<phraseB<<endl;
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
+
+		///-------------SYNONYMS-----------------------------------------------------------------------------------------
+
 
 		//descending sort
 		 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{

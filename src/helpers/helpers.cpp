@@ -112,7 +112,7 @@ namespace helpers{
 
 }
 
-string convertNumberToString(int number) 
+string convertNumberToString(int number)
 {
 	string res = std::to_string(number);
 	if (res.size() < 2) res  = "0" + res;
@@ -125,7 +125,7 @@ DataFile readFile(int fileNumber)
 	int groupNumber = fileNumber / 100;
 	// int groupNumber = 1;
 	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
-	fileName = "../newsdatatest/" + fileName + ".txt";
+	fileName = "./newsdatatest/" + fileName + ".txt";
 	DataFile data;
 	ifstream fin;
 	fin.open(fileName);

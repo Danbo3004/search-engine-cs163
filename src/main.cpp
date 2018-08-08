@@ -58,9 +58,9 @@ int main()
 
 	// view::View facade;
 	// facade.searchView();
+/*
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	WordsInFiles words;
-	words.Init();
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 	vector<FileResult> test;
@@ -121,6 +121,7 @@ int main()
 	cout << test.size() << endl;
 	cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
 	cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
+*/
 
 
 	view::View facade;

@@ -17,6 +17,9 @@ struct FileResult
   vector<Word> listWord;
 };
 
+void unionVector(std::vector<FileResult>&,std::vector<FileResult>&);
+void intersectVector(std::vector<FileResult>&,std::vector<FileResult>&);
+
 struct Node
 {
   vector<FileResult> files;

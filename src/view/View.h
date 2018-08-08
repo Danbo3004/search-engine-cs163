@@ -19,6 +19,9 @@
 #include "../autotype/AutoTrie.h"
 #include "../operators/wordopr.h"
 #include "../searchFile/searchFile.h"
+#include "../synonym/synonym.h"
+#include "../price/price.h"
+#include "../inTitle/inTitle.h"
 #include <algorithm>
 
 namespace view{

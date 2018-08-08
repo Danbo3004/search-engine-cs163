@@ -1,4 +1,50 @@
 #include "searchFile.h"
+void unionVector(std::vector<FileResult>& results,std::vector<FileResult>& tmp ){
+	std::vector<FileResult>::iterator vFileResultIter;
+	if (results.size()){
+		 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
+			 FileResult resi = *resIt;
+			 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&resi](const FileResult& file){
+																	 return file.indexFile == resi.indexFile;
+																	 });
+			 //merging
+			 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
+									 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
+									 [](const Word &a, const Word &b) {
+										return a.position < b.position;
+									});
+			 if (resIt == results.end()) break;
+		 }
+
+	 }
+	 else{
+		 results = tmp;
+	 }
+}
+
+void intersectVector(std::vector<FileResult>& results,std::vector<FileResult>& tmp ){
+	std::vector<FileResult>::iterator vFileResultIter;
+	if (results.size()){
+		 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
+			 FileResult resi = *resIt;
+			 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&resi](const FileResult& file){
+																	 return file.indexFile == resi.indexFile;
+																	 });
+			 //merging
+			 std::set_intersection(resIt->listWord.begin(), resIt->listWord.end(),
+									 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
+									 [](const Word &a, const Word &b) {
+										return a.position < b.position;
+									});
+			 if (resIt == results.end()) break;
+		 }
+
+	 }
+	 else{
+		 results = tmp;
+	 }
+}
+
 int Trie::findNode(string Word)
 {
   if (listNode.size() == 0) 

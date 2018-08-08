@@ -26,6 +26,7 @@ namespace helpers{
 	void removeOddCharFromVector(std::vector<std::string> &);
 	std::vector<std::string> stripNakedKeepStopwords(std::string);
 	//std::string removeOddCharFromString(const std::string&);
+
 }
 
 namespace constants{
