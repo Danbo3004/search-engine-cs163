@@ -71,8 +71,8 @@ int main()
 	begin = std::chrono::steady_clock::now();
 	// for (int i = 0; i < 20; i++) {
 		// test = operatorWord(words, "chief", "executive", MINUS);
-		test = operatorWord(words, "chief", "executive", AND);
-		test = operatorWord(words, "chief", "executive", OR);
+		test = operatorWord(words, "chief", "asdsadasdasd", AND);
+		// test = operatorWord(words, "chief", "executive", OR);
 		// test = findWildcard(words, pre, after);
 		// test = findExact(words, query);
 	// }
