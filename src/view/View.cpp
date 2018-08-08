@@ -11,7 +11,7 @@ namespace view{
 	}
 
 	void View::typeInput(std::string& field, const int& fieldLim/* = INT_MAX*/){
-		/*/-------------not cross-platform-----------------------------------------------------------------------------------------
+		//-------------not cross-platform-----------------------------------------------------------------------------------------
 		char ch;
 		int i = 0;
 		std::vector<std::string> historyList;
@@ -40,7 +40,7 @@ namespace view{
 				}
 			}
 		}
-		*///-----------------------------------------------------------------------------------------------------------------------
+		///-----------------------------------------------------------------------------------------------------------------------
 		getline(std::cin,field);
 	}
 
@@ -56,21 +56,123 @@ namespace view{
 			std::cout << "Search:  ";
 			typeInput(query);
 			trie.insert(query);
-			//find and remove query cues first
-			//find AND -> in string
-			//find OR  -> in string
-			//find ""  -> in string
-			//find intitle: (intitle:hammer nails  <=> exist "hammer" in the title) -> in vector
-			//find filetype: [nope]
-			//find + -> in the vector (stripStopwords won't strip)
-			//find - -> same
-			//find .. -> hmmmmmm brute? single query is find though
-			//find ~ -> itself
+
 
 		}
 	}
 
-	/*/-------------not cross-platform-----------------------------------------------------------------------------------------
+	std::vector<FileResult> View::searchFor(std::string& query){
+		std::vector<std::string> vstring = helpers::stripStopwords(query, stopwordsSet);
+
+		std::vector<std::string>::iterator it;
+
+		std::vector<FileResult> results;
+		std::vector<FileResult> tmp;
+		std::vector<FileResult>::iterator vFileResultIter;
+		std::string phraseA = "", phraseB = "";
+
+		//find and remove query cues first
+		//find AND -> in string /
+		//find OR  -> in string /
+		//find ""  -> in string /
+		//find intitle: (intitle:hammer nails  <=> exist "hammer" in the title) -> in vector
+		//find filetype: [nope]
+		//find + -> in the vector (stripStopwords won't strip) /
+		//find - -> same /
+		//find .. -> hmmmmmm brute? single query is find though
+		//find ~ -> itself /
+
+
+		//-------------AND-----------------------------------------------------------------------------------------
+		//how about multiple ANDs?
+		//find -> intersect
+		for(it = std::find(vstring.begin(), vstring.end(), "AND"); it != vstring.end(); vstring.erase(it)){
+			 phraseA = phraseB = "";
+
+			 if (it != vstring.begin()) std::string phraseA = *(it-1);
+			 if (it != vstring.end()-1) std::string phraseB = *(it+1);
+
+			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
+
+			 if (results.size()){
+				 for (int i = 0; i<tmp.size(); i++){
+
+					 FileResult cmp = results[i];
+					 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&cmp](const FileResult& file){
+																			 return file.indexFile < cmp.indexFile;
+																			 });
+
+					 if(vFileResultIter == tmp.end()){
+						 results.erase(results.begin()+i);
+					 }
+					 else{
+						 //merging
+						 std::set_intersection(results[i].listWord.begin(), results[i].listWord.end(),
+												 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),results[i].listWord.begin(),
+												 [](const Word &a, const Word &b) {
+													return a.position < b.position;
+												});
+					 }
+				 }
+			 }
+			 else{
+				 results = tmp;
+			 }
+		}
+		///-----------------------------------------------------------------------------------------------------------------------
+
+
+		//-------------OR-----------------------------------------------------------------------------------------
+		//and multiple ORs
+		for(it = std::find(vstring.begin(), vstring.end(), "OR"); it != vstring.end(); vstring.erase(it)){
+			 phraseA = phraseB = "";
+
+			 if (it != vstring.begin()) std::string phraseA = *(it-1);
+			 if (it != vstring.end()-1) std::string phraseB = *(it+1);
+
+			 tmp = orOperator(wordsInFiles,phraseA,phraseB);
+
+			 if (results.size()){
+				 for (int i = 0; i<tmp.size(); i++){
+
+					 FileResult cmp = results[i];
+					 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&cmp](const FileResult& file){
+																			 return file.indexFile == cmp.indexFile;
+																			 });
+
+					 if(vFileResultIter == tmp.end()){
+						 results.erase(results.begin()+i);
+					 }
+					 else{
+						 //merging
+						 std::set_intersection(results[i].listWord.begin(), results[i].listWord.end(),
+												 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),results[i].listWord.begin(),
+												 [](const Word &a, const Word &b) {
+												return a.position < b.position;
+											});
+					 }
+				 }
+			 }
+			 else{
+				 results = tmp;
+			 }
+		}
+		//------------------------------------------------------------------------------------------------------
+
+
+
+
+
+		//descending sort
+		 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+			 return fileA.listWord.size() > fileB.listWord.size();
+		 });
+
+		 return results;
+	}
+
+
+	//-------------not cross-platform-----------------------------------------------------------------------------------------
 	void View::gotoxy(int x, int y){         //For Setting the position of Cursor
 		COORD coord = {0,0};
 		coord.X = x;
@@ -153,7 +255,7 @@ namespace view{
 		gotoxy(coord.X, coord.Y);
 	}
 
-	*///-----------------------------------------------------------------------------------------------------------------------
+	///-----------------------------------------------------------------------------------------------------------------------
 
 
 }

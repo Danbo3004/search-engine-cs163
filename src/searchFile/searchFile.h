@@ -8,7 +8,7 @@ using namespace std;
 struct Word
 {
   int position;
-  int isTitle;
+  bool isTitle;
 };
 
 struct FileResult
@@ -41,7 +41,7 @@ private:
 
 public:
   vector<FileResult> searchWord(string word);
-  void Init();
+  WordsInFiles();
 };
 
 class CurrentFile

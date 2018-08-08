@@ -47,6 +47,10 @@ vector<FileResult> operatorWord(WordsInFiles &words, vector<FileResult> a, vecto
                 newFile.listWord = a[indexOfA[index]].listWord;
                 newFile.listWord.insert(newFile.listWord.end(),
                                         b[indexOfB[index]].listWord.begin(), b[indexOfB[index]].listWord.end());
+                //sort
+               	sort(newFile.listWord.begin(), newFile.listWord.end(),[](const Word &a, const Word &b) {
+               																return a.position < b.position;
+               															});
                 res.push_back(newFile);
             }
         }
@@ -58,6 +62,10 @@ vector<FileResult> operatorWord(WordsInFiles &words, vector<FileResult> a, vecto
                 newFile.listWord = a[indexOfA[index]].listWord;
             newFile.listWord.insert(newFile.listWord.end(),
                                     b[indexOfB[index]].listWord.begin(), b[indexOfB[index]].listWord.end());
+            //sort
+           	sort(newFile.listWord.begin(), newFile.listWord.end(),[](const Word &a, const Word &b) {
+																		return a.position < b.position;
+																	});
             res.push_back(newFile);
         }
         else if (operation == MINUS)
@@ -142,9 +150,14 @@ vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
 
         // only add file having matching to the result
         if (result.listWord.size() != 0)
+        	sort(result.listWord.begin(), result.listWord.end(),[](const Word &a, const Word &b) {
+																	return a.position < b.position;
+																});
             res.push_back(result);
     }
     // std::cout << "Total time for find: " << initTime << endl;
+
+
 
     return res;
 }
@@ -196,6 +209,9 @@ vector<FileResult> findWildcard(WordsInFiles &words, vector<string> pre, vector<
                     }
                 }
                 if (newFile.listWord.size() != 0)
+                	sort(newFile.listWord.begin(), newFile.listWord.end(), [](const Word &a, const Word &b) {
+																				return a.position < b.position;
+																			});
                     res.push_back(newFile);
             }
         }

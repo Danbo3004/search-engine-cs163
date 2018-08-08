@@ -69,7 +69,7 @@ vector<FileResult> WordsInFiles::searchWord(string Word)
   }
 }
 
-void WordsInFiles::Init()
+WordsInFiles::WordsInFiles()
 {
   // for (int g = 0; g < 25; g++)
   // {
