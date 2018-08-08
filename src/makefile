@@ -5,5 +5,7 @@ main: ./main.cpp ./helpers/helpers.cpp ./helpers/helpers.h ./view/View.cpp ./vie
 	g++ -std=c++11 -Wall -c ./autotype/AutoTrie.cpp -o autotrie.o
 	g++ -std=c++11 -Wall -c ./searchFile/searchFile.cpp -o searchfile.o
 	g++ -std=c++11 -Wall ./main.cpp -o main *.o
-clean:
+log:
+	rm -f log.txt
+clean: log
 	rm -f main *.o
