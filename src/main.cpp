@@ -1,14 +1,18 @@
 #include "helpers/helpers.h"
 #include "autotype/AutoTrie.h"
 #include "view/View.h"
+#include "inTitle/inTitle.h"
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
 #include "searchFile/searchFile.h"
+#include "synonym/synonym.h"
 #include <chrono>
 #include <iomanip>
+#include "price/price.h"
 
-int main(){
+int main()
+{
 	//test bed
 
 	/*//-------------------------------stripStopwords test-----------------------------
@@ -22,7 +26,8 @@ int main(){
 	fclose(stdin);
 	std::vector<std::string> vstrings = helpers::stripNakedKeepStopwords(s);//(s, stopwordsSet);
 	std::copy(vstrings.begin(), vstrings.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
-	*///--------------------------------------------------------------------------------
+	*/
+	//--------------------------------------------------------------------------------
 
 	/*//-------------------------------Autotype test-----------------------------
 	AutoTrie trie;
@@ -30,9 +35,9 @@ int main(){
 	trie.insert("hello world");
 	std::vector<std::string> vstrings = trie.autotype("h");
 	std::copy(vstrings.begin(), vstrings.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
-	*///--------------------------------------------------------------------------------
+	*/
+	//--------------------------------------------------------------------------------
 
-	/*//-------------------------------Tam+Thuc's test-----------------------------
 	// int index = 1000;
 	// CurrentFile cf;
 	// for (int  i = 1; i < 10; i++) {
@@ -49,25 +54,34 @@ int main(){
 	//     cout << s << " ";
 	// }
 	// cout << "--------------------------------------------------" << endl;
-	vector<FileResult> test;
-	vector<string> query{"chief", "executive"};
-	vector<string> pre{
-		"client",
-		"who"};
-	vector<string> after{"same", "number"};
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	//--------------------------------------------------------------------------------
 
+	// view::View facade;
+	// facade.searchView();
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	WordsInFiles words;
 	words.Init();
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
-
+	vector<FileResult> test;
+	vector<string> query{"uber"};
+	vector<string> queryTitle{"uber"};
+	vector<string> pre{
+		"client",
+		"who"};
+	vector<string> after{"same", "number"};
 	begin = std::chrono::steady_clock::now();
-	// test = operatorWord(words, "chief", "executive", MINUS);
-	// test = operatorWord(words, "chief", "executive", AND);
-	// test = operatorWord(words, "chief", "executive", OR);
-	// test = findWildcard(words, pre, after);
-	test = findExact(words, query);
+	// for (int i = 0; i < 20; i++) {
+		// test = operatorWord(words, "chief", "executive", MINUS);
+		// test = operatorWord(words, "chief", "asdsadasdasd", AND);
+		// test = operatorWord(words, "chief", "executive", OR);
+		// test = findWildcard(words, pre, after);
+		// test = findExact(words, query);
+		// test = searchSynonym(words, "account");
+		// test = searchInTitle(words, queryTitle);
+		// test = searchPrice(words, "fish", "$17");
+		test = searchInRange(words, "camera", "$1", "$20");
+	// }
 	end = std::chrono::steady_clock::now();
 	double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 	CurrentFile currentFile;
@@ -105,13 +119,14 @@ int main(){
 		cout << endl;
 	}
 	cout << test.size() << endl;
-	cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
 	cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
-	 *///--------------------------------------------------------------------------------
+	cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
 
 
 	view::View facade;
 	facade.searchView();
 
+	// WordsInFiles words;
+	// words.Init();
 	return 0;
 }

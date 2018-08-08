@@ -311,7 +311,6 @@ namespace view{
 		 return results;
 	}
 
-
 	//-------------not cross-platform-----------------------------------------------------------------------------------------
 	void View::gotoxy(int x, int y){         //For Setting the position of Cursor
 		COORD coord = {0,0};

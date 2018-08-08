@@ -1,8 +1,7 @@
 #include "searchFile.h"
-
 int Trie::findNode(string Word)
 {
-  if (listNode.size() == 0)
+  if (listNode.size() == 0) 
   {
     Node newNode;
     newNode.init();
@@ -12,7 +11,7 @@ int Trie::findNode(string Word)
   int curWord = 0;
   while (cur != -1 && curWord < Word.length())
   {
-    cur = listNode[cur].pNext[int(Word[curWord])+127];
+    cur = listNode[cur].pNext[int(Word[curWord]) + 127];
     curWord++;
   }
   return cur;
@@ -33,14 +32,14 @@ void Trie::insertWord(int indexFile, int position, int isTitle, string word)
   int curWord = 0;
   while (curWord < word.length())
   {
-    if (listNode[cur].pNext[int(word[curWord])+127] == -1)
+    if (listNode[cur].pNext[int(word[curWord]) + 127] == -1)
     {
       Node newNode;
       newNode.init();
       listNode.push_back(newNode);
-      listNode[cur].pNext[int(word[curWord])+127] = listNode.size() - 1;
+      listNode[cur].pNext[int(word[curWord]) + 127] = listNode.size() - 1;
     }
-    cur = listNode[cur].pNext[int(word[curWord++])+127];
+    cur = listNode[cur].pNext[int(word[curWord++]) + 127];
   }
   if (listNode[cur].files.size() != 0 && listNode[cur].files.back().indexFile == indexFile)
   {
@@ -71,19 +70,30 @@ vector<FileResult> WordsInFiles::searchWord(string Word)
 
 WordsInFiles::WordsInFiles()
 {
-  // for (int g = 0; g < 25; g++)
-  // {
+
+  for (int g = 1; g <= 25; g++)
+  {
+    // if (g == 8 || g == 10 || g== 14 || g == 16 || g == 19 || g == 20
+    // || g == 23 || g == 24 ) continue;
+
     for (int i = 0; i < 100; ++i)
     {
-      int indexFile = 9 * 100 + i;
+      int indexFile = g * 100 + i;
       // int indexRead = 9*100 + i;
+      // log(std::to_string(indexFile));
+      // log("");
+      // cout << indexFile << ": " << endl;
       DataFile dataFile = readFile(indexFile);
+      // cout << dataFile.content.size() << "  " << dataFile.title.size() << endl;
+      // cout << indexFile << ": ";
+      // cout << dataFile.content.size () << "  " << dataFile.title.size() << endl;
       for (int j = 0; j < dataFile.title.size(); ++j)
         data.insertWord(indexFile, j, 1, dataFile.title[j]);
       for (int j = 0; j < dataFile.content.size(); ++j)
         data.insertWord(indexFile, j, 0, dataFile.content[j]);
+      // cout << "Insert done" << endl;
     }
-  // }
+  }
 }
 
 string CurrentFile::getWordByIndex(int fileRequest, int wordIndex, bool isTitle)

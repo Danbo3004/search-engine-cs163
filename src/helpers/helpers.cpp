@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include <iostream>
 
 namespace helpers{
 	std::vector<std::string> stripStopwords(std::string stripString, const std::set<std::string>& stopwords){
@@ -102,6 +103,7 @@ namespace helpers{
 
 
 	std::vector<std::string> stripNakedKeepStopwords(std::string stripString){
+		//std::string newString = removeOddCharFromString(stripString);
 		std::vector<std::string> vstring = stringToVector(stripString);
 		removeOddCharFromVector(vstring);
 
@@ -120,12 +122,14 @@ string convertNumberToString(int number)
 DataFile readFile(int fileNumber) 
 {
 	int newsNumber = fileNumber % 100;
-	// int groupNumber = fileNumber / 100;
-	int groupNumber = 9;
+	int groupNumber = fileNumber / 100;
+	// int groupNumber = 1;
 	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
-	fileName = "./newsdata/" + fileName + ".txt";
+	fileName = "../newsdatatest/" + fileName + ".txt";
+	DataFile data;
 	ifstream fin;
 	fin.open(fileName);
+	if (!fin) return data;
 	string title, content = "";
 	getline(fin, title);
 	while (!fin.eof()) 
@@ -134,8 +138,16 @@ DataFile readFile(int fileNumber)
 		fin >> word;
 		content += word + " ";
 	}
-	DataFile data;
 	data.title = helpers::stripNakedKeepStopwords(title);
 	data.content = helpers::stripNakedKeepStopwords(content);
 	return data;
+}
+
+void log(std::string s) {
+	ofstream fout(constants::LOG_FILE_PATH, std::ios_base::app);
+	if (!fout) {
+		cout << "File error" << endl;
+		return;
+	}
+	fout << s << endl;
 }

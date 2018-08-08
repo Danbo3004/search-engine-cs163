@@ -9,7 +9,7 @@ using std::vector;
 const int AND = 1;
 const int OR = 2;
 const int MINUS = 3;
-const int WILDCARD_DIS = 6;
+const int WILDCARD_DIS = 1;
 
 vector<FileResult> andOperator(WordsInFiles &words, string a, string b);
 vector<FileResult> orOperator(WordsInFiles &words, string a, string b);
