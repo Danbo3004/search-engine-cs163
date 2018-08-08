@@ -6,6 +6,7 @@
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
 #include "searchFile/searchFile.h"
+#include "synonym/synonym.h"
 #include <chrono>
 #include <iomanip>
 
@@ -114,5 +115,11 @@ int main()
 	cout << test.size() << endl;
 	cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
 	cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
+
+	// view::View facade;
+	// facade.searchView();
+
+	// WordsInFiles words;
+	// words.Init();
 	return 0;
 }

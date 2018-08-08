@@ -29,8 +29,9 @@ namespace helpers{
 }
 
 namespace constants{
-	const std::string stopwordsPath = "./data/stopwords.txt";
 	const std::string LOG_FILE_PATH = "./log.txt";
+	const std::string stopwordsPath = "../data/stopwords.txt";
+	const std::string synonymPath = "../data/synonyms.txt";
 }
 
 struct DataFile {
