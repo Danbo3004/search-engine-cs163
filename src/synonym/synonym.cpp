@@ -4,20 +4,22 @@
 vector <string> getSynonyms(string word) {
    ifstream file;
    file.open(constants::synonymPath);
+   if (!file.is_open()){
+       cout << "File error\n";
+   }
    vector <string> synonyms;
    string line;
    while (file >> line){
-       if (line.find(word) == 0){ // find matching word
-           int br = (int) (line.find(word) + word.length());
-           string str = "";
-           for (int i = br + 1; i < line.length(); ++i){ // break words
-               if (line[i] == ',') {
-                   synonyms.push_back(str);
+       if (line.find(word) != string::npos){ // find matching word
+            string str = "";
+            for (int i = 0; i < line.length(); ++i){ // break words
+                if (line[i] == ',') {
+                   if (str != word) synonyms.push_back(str);
                    str = "";
                    continue;
-               }
-               str += line[i];
-           }
+                }
+                str += line[i];
+            }
            if (str != "") synonyms.push_back(str);
            break;
        }

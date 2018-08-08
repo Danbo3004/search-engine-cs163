@@ -125,7 +125,7 @@ DataFile readFile(int fileNumber)
 	// int groupNumber = fileNumber / 100;
 	int groupNumber = 9;
 	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
-	fileName = "./newsdata/" + fileName + ".txt";
+	fileName = "../newsdata/" + fileName + ".txt";
 	ifstream fin;
 	fin.open(fileName);
 	string title, content = "";

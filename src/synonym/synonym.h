@@ -12,7 +12,7 @@ using namespace std;
 
 vector <string> getSynonyms(string word);
 
-vector <FileResult> searchSynonym(string word);
+vector <FileResult> searchSynonym(WordsInFiles &wordsInFiles, string word);
 
 bool cmpByNumber(FileResult a, FileResult b);
 

@@ -1,6 +1,6 @@
 #include "helpers/helpers.h"
 #include "autotype/AutoTrie.h"
-#include "view/View.h"
+// #include "view/View.h"
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include "operators/wordopr.h"
@@ -33,7 +33,6 @@ int main(){
 	std::copy(vstrings.begin(), vstrings.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 	*///--------------------------------------------------------------------------------
 
-	/*//-------------------------------Tam+Thuc's test-----------------------------
 	// int index = 1000;
 	// CurrentFile cf;
 	// for (int  i = 1; i < 10; i++) {
@@ -58,7 +57,11 @@ int main(){
 	vector<string> after{"same", "number"};
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
+
 	WordsInFiles words;
+	words.Init();
+
+
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double initTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 
@@ -67,7 +70,7 @@ int main(){
 	// test = operatorWord(words, "chief", "executive", AND);
 	// test = operatorWord(words, "chief", "executive", OR);
 	// test = findWildcard(words, pre, after);
-	test = findExact(words, query);
+	test = searchSynonym(words, "history");
 	end = std::chrono::steady_clock::now();
 	double searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() / 1e6;
 	CurrentFile currentFile;
@@ -107,10 +110,11 @@ int main(){
 	cout << test.size() << endl;
 	cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
 	cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
-	 *///--------------------------------------------------------------------------------
 
-	view::View facade;
-	facade.searchView();
+	// view::View facade;
+	// facade.searchView();
 
+	// WordsInFiles words;
+	// words.Init();
 	return 0;
 }
