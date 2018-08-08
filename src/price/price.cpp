@@ -1,6 +1,6 @@
 #include "price.h"
 
-vector<FileResult> searchPrice(WordsInFiles &wordsInFiles, string object, string price)
+vector <FileResult> searchPrice(WordsInFiles &wordsInFiles, string object, string price)
 {
   map<int, int> fileIndex;
   vector<FileResult> res;
@@ -21,7 +21,7 @@ vector<FileResult> searchPrice(WordsInFiles &wordsInFiles, string object, string
     FileResult file = priceFiles[i];
     if (fileIndex.count(file.indexFile))
     {
-      int pos = fileIndex.count(file.indexFile);
+      int pos = fileIndex[file.indexFile];
       objectFiles[pos].listWord.push_back(file.listWord[0]);
       res.push_back(objectFiles[pos]);
     }
