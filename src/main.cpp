@@ -12,7 +12,7 @@ int main(){
 	//test bed
 
 	/*//-------------------------------stripStopwords test-----------------------------
-	std::string s = "           a friendly,  Hello World Fuck. You                  ";
+	std::string s = "           a friendly,  Hello World Fuck. You. .";
 	std::set<std::string> stopwordsSet;
 	freopen(constants::stopwordsPath.c_str(), "r", stdin);
 	std::string word;
@@ -20,7 +20,7 @@ int main(){
 		stopwordsSet.insert(word);
 	}
 	fclose(stdin);
-	std::vector<std::string> vstrings = helpers::stripStopwords(s, stopwordsSet);
+	std::vector<std::string> vstrings = helpers::stripNakedKeepStopwords(s);//(s, stopwordsSet);
 	std::copy(vstrings.begin(), vstrings.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 	*///--------------------------------------------------------------------------------
 
@@ -108,6 +108,7 @@ int main(){
 	cout << "Build trie: " << fixed << setprecision(2) << initTime << " seconds" << endl;
 	cout << "5 operators: " << searchTime << fixed << setprecision(2) << "seconds" << endl;
 	 *///--------------------------------------------------------------------------------
+
 
 	view::View facade;
 	facade.searchView();

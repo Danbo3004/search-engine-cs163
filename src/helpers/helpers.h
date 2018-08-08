@@ -20,10 +20,12 @@ using namespace std;
 
 namespace helpers{
 	std::vector<std::string> stringToVector(std::string);
+	std::vector<std::string> stringToRawVector(std::string stripString);
 	std::vector<std::string> stripStopwords(const std::string, const std::set<std::string>&);
 	void removeNonOperatorFromVector(std::vector<std::string>&);
 	void removeOddCharFromVector(std::vector<std::string> &);
 	std::vector<std::string> stripNakedKeepStopwords(std::string);
+	//std::string removeOddCharFromString(const std::string&);
 }
 
 namespace constants{

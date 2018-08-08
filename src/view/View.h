@@ -18,6 +18,8 @@
 #include "../helpers/helpers.h"
 #include "../autotype/AutoTrie.h"
 #include "../operators/wordopr.h"
+#include "../searchFile/searchFile.h"
+#include <algorithm>
 
 namespace view{
 	class View{
@@ -36,6 +38,7 @@ namespace view{
 		void title();
 		void history(const string&, std::vector<std::string>&);
 		std::vector<FileResult> searchFor(std::string&);
+		void display(std::vector<FileResult> results, std::string);
 	};
 
 }

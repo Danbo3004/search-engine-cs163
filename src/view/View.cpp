@@ -17,14 +17,14 @@ namespace view{
 		std::vector<std::string> historyList;
 
 		ch = getch();
-		while(ch != 13){                  // gets input until 'Enter' key is pressed
+		while(ch != 13){                  // get input until 'Enter' key is pressed
 			if(ch == '\b'){
 				if(field.size() > 0 ){
 					field.erase(field.begin() + field.size() -1);
 					std::cout << "\b \b";
-					history(field,historyList);
 					i--;
 				}
+				history(field,historyList);
 				ch = getch();
 			}
 			else{
@@ -41,28 +41,76 @@ namespace view{
 			}
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
-		getline(std::cin,field);
+		//getline(std::cin,field);
 	}
 
 	void View::searchView(){
 		while(true){
 			std::string query = "" ;
-			/*/-------------not cross-platform-----------------------------------------------------------------------------------------
+			//-------------not cross-platform-----------------------------------------------------------------------------------------
 			title();
-
 			time();
 			gotoxy(20,20);
-			*///-----------------------------------------------------------------------------------------------------------------------
+			///-----------------------------------------------------------------------------------------------------------------------
 			std::cout << "Search:  ";
 			typeInput(query);
+			//query = "hello AND world";
 			trie.insert(query);
+
+
+			std::vector<FileResult> results = searchFor(query);
+			std::cout<<results.size();
+			system("pause");
+			display(results,query);
 
 
 		}
 	}
 
+	void View::display(std::vector<FileResult> results, std::string query){
+		system("cls");
+
+		std::vector<std::string> cleanString = helpers::stripStopwords(query, stopwordsSet);
+		std::set<std::string> searchQuery;
+		std::copy( cleanString.begin(), cleanString.end(), std::inserter( searchQuery, searchQuery.end() ) );
+
+		for (int i = 0; i < std::min((int)results.size(),5); ++i)
+		{
+			DataFile resFile = readFile(results[i].indexFile);
+			cout<<results[i].listWord.size()<<endl;
+			cout<<"Title: ";
+			for (int j = 0; j<std::min(20,(int)resFile.title.size()); j++){
+				if (std::find(searchQuery.begin(), searchQuery.end(), resFile.title[j]) != searchQuery.end()){
+					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 2);
+					cout << resFile.title[j]<<" ";
+					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 15);
+				}
+				else{
+					cout << resFile.title[j]<<" ";
+				}
+			}
+
+			cout << endl;
+			cout << "Content: ";
+			for (int j = 0; j<std::min(200,(int)resFile.content.size()); j++){
+				int tmp = j+resFile.title.size();
+				if (std::find(searchQuery.begin(), searchQuery.end(), resFile.content[j]) != searchQuery.end()){
+					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 2);
+					cout << resFile.content[j]<<" ";
+					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 15);
+				}
+				else{
+					cout << resFile.content[j]<<" ";
+				}
+			}
+
+			cout<<endl<<endl;
+		}
+		system("pause");
+	}
+
 	std::vector<FileResult> View::searchFor(std::string& query){
-		std::vector<std::string> vstring = helpers::stripStopwords(query, stopwordsSet);
+		std::vector<std::string> vstring = helpers::stringToRawVector(query);
 
 		std::vector<std::string>::iterator it;
 
@@ -86,7 +134,9 @@ namespace view{
 		//-------------AND-----------------------------------------------------------------------------------------
 		//how about multiple ANDs?
 		//find -> intersect
+
 		for(it = std::find(vstring.begin(), vstring.end(), "AND"); it != vstring.end(); vstring.erase(it)){
+			 std::vector<std::string> cleanString = helpers::stripStopwords(std::string(query.begin(), it + 1), stopwordsSet);
 			 phraseA = phraseB = "";
 
 			 if (it != vstring.begin()) std::string phraseA = *(it-1);
@@ -160,9 +210,6 @@ namespace view{
 		//------------------------------------------------------------------------------------------------------
 
 
-
-
-
 		//descending sort
 		 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
 			 return fileA.listWord.size() > fileB.listWord.size();
@@ -205,8 +252,10 @@ namespace view{
 	    }
 	}
 
+
 	void View::title(){
 		system("cls");
+		SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 15);
 		std::cout <<"\n\n";
 		std::cout <<"\t\t\t";
 		std::cout <<" .----------------.  .----------------.  .----------------.  .----------------. \n";
