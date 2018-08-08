@@ -29,8 +29,13 @@ namespace helpers{
 }
 
 namespace constants{
+<<<<<<< HEAD
 	const std::string stopwordsPath = "../data/stopwords.txt";
 	const std::string synonymPath = "../data/synonyms.txt";
+=======
+	const std::string stopwordsPath = "./data/stopwords.txt";
+	const std::string synonymPath = "./data/synonyms.txt";
+>>>>>>> 0cdbe4cc68461cac0705e97a89d83f6031ff3754
 }
 
 struct DataFile {
