@@ -1,4 +1,4 @@
-#include "in-title.h"
+#include "./inTitle.h"
 
 bool cmpByNumber(FileResult a, FileResult b)
 {
@@ -47,11 +47,22 @@ vector <FileResult> searchInTitle(WordsInFiles &wordsInFiles, vector <string> wo
       }
     }
   }
-  sort(res.begin(), res.end(), cmpByNumber);
+
+  // Including all words
+  vector <FileResult> filterRes;
+  int len = words.size();
+  for (int i = 0; i < (int)res.size(); ++i){
+    FileResult file = res[i];
+    if (fileCount[file.indexFile] == len) {
+      filterRes.push_back(file);
+    }
+  }
+
+  sort(filterRes.begin(), filterRes.end(), cmpByNumber);
   vector<FileResult> fiveRes;
-  for (int i = 0; i < min(5, (int)res.size()); ++i)
+  for (int i = 0; i < min(5, (int)filterRes.size()); ++i)
   {
-    fiveRes.push_back(res[i]);
+    fiveRes.push_back(filterRes[i]);
   }
   return fiveRes;
 }

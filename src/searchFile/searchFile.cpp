@@ -78,8 +78,8 @@ void WordsInFiles::Init()
       int indexFile = 4 * 100 + i;
       // int indexRead = 9*100 + i;
       DataFile dataFile = readFile(indexFile);
-      cout << indexFile << ": ";
-      cout << dataFile.content.size () << "  " << dataFile.title.size() << endl;
+      // cout << indexFile << ": ";
+      // cout << dataFile.content.size () << "  " << dataFile.title.size() << endl;
       for (int j = 0; j < dataFile.title.size(); ++j)
         data.insertWord(indexFile, j, 1, dataFile.title[j]);
       for (int j = 0; j < dataFile.content.size(); ++j)
