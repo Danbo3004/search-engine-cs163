@@ -9,6 +9,7 @@
 #include "synonym/synonym.h"
 #include <chrono>
 #include <iomanip>
+#include "price/price.h"
 
 int main()
 {

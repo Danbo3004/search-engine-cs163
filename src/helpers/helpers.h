@@ -41,6 +41,6 @@ struct DataFile {
 DataFile readFile(int fileNumber);
 void log(std::string s);
 
+string convertNumberToString(int number);
+
 #endif
-
-
