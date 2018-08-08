@@ -111,13 +111,20 @@ namespace view{
 
 	std::vector<FileResult> View::searchFor(std::string& query){
 		std::vector<std::string> vstring = helpers::stringToRawVector(query);
+		std::vector<std::string> cleanString;
 
 		std::vector<std::string>::iterator it;
+		std::string s;
+		std::string::iterator sIter;
 
 		std::vector<FileResult> results;
 		std::vector<FileResult> tmp;
 		std::vector<FileResult>::iterator vFileResultIter;
 		std::string phraseA = "", phraseB = "";
+
+		int count = 0;
+
+		bool called = false;
 
 		//find and remove query cues first
 		//find AND -> in string /
@@ -131,39 +138,52 @@ namespace view{
 		//find ~ -> itself /
 
 
+		//-------------MINUS-----------------------------------------------------------------------------------------
+		it = std::find_if(vstring.begin(), vstring.end(), [](const string& s){
+															 return s.front() == '-';
+															 });
+		if (it != vstring.end()){
+			vstring.erase(it);
+			called = true;
+		}
+
+		//------------------------------------------------------------------------------------------------------
+
 		//-------------AND-----------------------------------------------------------------------------------------
 		//how about multiple ANDs?
 		//find -> intersect
+		for(it = std::find(vstring.begin(), vstring.end(), "AND"); it != vstring.end(); vstring.erase(vstring.begin(),it+1)){
+			 called = true;
+			 if (it == vstring.end()) break;
+			 s = *(it-1)+" "+*(it+1);
 
-		for(it = std::find(vstring.begin(), vstring.end(), "AND"); it != vstring.end(); vstring.erase(it)){
-			 std::vector<std::string> cleanString = helpers::stripStopwords(std::string(query.begin(), it + 1), stopwordsSet);
-			 phraseA = phraseB = "";
-
-			 if (it != vstring.begin()) std::string phraseA = *(it-1);
-			 if (it != vstring.end()-1) std::string phraseB = *(it+1);
-
+			 cleanString = helpers::stripStopwords(s, stopwordsSet);
+			 phraseA = cleanString.front();
+			 phraseB = cleanString.back();
 			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
-
 			 if (results.size()){
-				 for (int i = 0; i<tmp.size(); i++){
 
-					 FileResult cmp = results[i];
-					 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&cmp](const FileResult& file){
-																			 return file.indexFile < cmp.indexFile;
+				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
+
+					 FileResult resi = *resIt;
+					 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&resi](const FileResult& file){
+																			 return file.indexFile == resi.indexFile;
 																			 });
-
+					 cout << s << endl;
 					 if(vFileResultIter == tmp.end()){
-						 results.erase(results.begin()+i);
+						 results.erase(resIt);
 					 }
 					 else{
 						 //merging
-						 std::set_intersection(results[i].listWord.begin(), results[i].listWord.end(),
-												 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),results[i].listWord.begin(),
+						 std::set_intersection(resIt->listWord.begin(), resIt->listWord.end(),
+												 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
 												 [](const Word &a, const Word &b) {
 													return a.position < b.position;
 												});
 					 }
+					 if (resIt == results.end()) break;
 				 }
+
 			 }
 			 else{
 				 results = tmp;
@@ -174,34 +194,27 @@ namespace view{
 
 		//-------------OR-----------------------------------------------------------------------------------------
 		//and multiple ORs
-		for(it = std::find(vstring.begin(), vstring.end(), "OR"); it != vstring.end(); vstring.erase(it)){
-			 phraseA = phraseB = "";
+		for(it = std::find(vstring.begin(), vstring.end(), "OR"); it != vstring.end(); vstring.erase(vstring.begin(),it+1)){
+			 called = true;
+			 if (it == vstring.end()) break;
+			 s = *(it-1)+" "+*(it+1);
 
-			 if (it != vstring.begin()) std::string phraseA = *(it-1);
-			 if (it != vstring.end()-1) std::string phraseB = *(it+1);
-
+			 cleanString = helpers::stripStopwords(s, stopwordsSet);
+			 phraseA = cleanString.front();
+			 phraseB = cleanString.back();
 			 tmp = orOperator(wordsInFiles,phraseA,phraseB);
-
 			 if (results.size()){
-				 for (int i = 0; i<tmp.size(); i++){
 
-					 FileResult cmp = results[i];
-					 vFileResultIter = std::find_if(tmp.begin(), tmp.end(), [&cmp](const FileResult& file){
-																			 return file.indexFile == cmp.indexFile;
-																			 });
-
-					 if(vFileResultIter == tmp.end()){
-						 results.erase(results.begin()+i);
-					 }
-					 else{
-						 //merging
-						 std::set_intersection(results[i].listWord.begin(), results[i].listWord.end(),
-												 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),results[i].listWord.begin(),
-												 [](const Word &a, const Word &b) {
+				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
+					 //merging
+					 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
+											 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
+											 [](const Word &a, const Word &b) {
 												return a.position < b.position;
 											});
-					 }
+					 if (resIt == results.end()) break;
 				 }
+
 			 }
 			 else{
 				 results = tmp;
@@ -209,6 +222,79 @@ namespace view{
 		}
 		//------------------------------------------------------------------------------------------------------
 
+		//-------------WILDCARD-----------------------------------------------------------------------------------------
+		//find -> union
+		sIter = find(query.begin(), query.end(), '*');
+		if(sIter != query.end()){
+			 called = true;
+			 phraseA = std::string(query.begin(), sIter-1);
+			 phraseB = std::string(sIter+1,query.end());
+
+			 cout<<phraseA<<phraseB<<endl;
+
+			 std::vector<std::string> vectorA = helpers::stripStopwords(phraseA, stopwordsSet);
+			 std::vector<std::string> vectorB = helpers::stripStopwords(phraseB, stopwordsSet);
+
+			 tmp = findWildcard(wordsInFiles,vectorA,vectorB);
+			 if (results.size()){
+
+				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
+					 //merging
+					 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
+											 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
+											 [](const Word &a, const Word &b) {
+												return a.position < b.position;
+											});
+					 if (resIt == results.end()) break;
+				 }
+
+			 }
+			 else{
+				 results = tmp;
+			 }
+		}
+		///-----------------------------------------------------------------------------------------------------------------------
+
+		//-------------EXACT-----------------------------------------------------------------------------------------
+		if(vstring.size() == 1 || (vstring.front().front() == 34 && vstring.back().back() == 34)){
+			called = true;
+			cleanString = helpers::stripNakedKeepStopwords(query);
+			results = findExact(wordsInFiles, cleanString);
+		}
+		///-----------------------------------------------------------------------------------------------------------------------
+
+
+		//-------------DEFAULT AND PLUS-----------------------------------------------------------------------------------------
+		for(it = vstring.begin(); it != vstring.end() - 1; it++){
+			 if (called) break;
+
+			 s = *(it)+" "+*(it+1);
+
+			 cleanString = helpers::stripStopwords(s, stopwordsSet);
+			 phraseA = cleanString.front();
+			 phraseB = cleanString.back();
+
+			 if (phraseA.front() == '+') phraseA.erase(0,1);
+			 if (phraseB.front() == '+') phraseB.erase(0,1);
+
+			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
+			 if (results.size()){
+				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
+					 //merging
+					 std::set_union(resIt->listWord.begin(), resIt->listWord.end(),
+											 vFileResultIter->listWord.begin(), vFileResultIter->listWord.end(),resIt->listWord.begin(),
+											 [](const Word &a, const Word &b) {
+												return a.position < b.position;
+											});
+					 if (resIt == results.end()) break;
+				 }
+
+			 }
+			 else{
+				 results = tmp;
+			 }
+		}
+		///-----------------------------------------------------------------------------------------------------------------------
 
 		//descending sort
 		 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
