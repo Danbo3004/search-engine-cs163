@@ -126,8 +126,10 @@ DataFile readFile(int fileNumber)
 	// int groupNumber = 1;
 	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
 	fileName = "../newsdatatest/" + fileName + ".txt";
+	DataFile data;
 	ifstream fin;
 	fin.open(fileName);
+	if (!fin) return data;
 	string title, content = "";
 	getline(fin, title);
 	while (!fin.eof()) 
@@ -136,7 +138,6 @@ DataFile readFile(int fileNumber)
 		fin >> word;
 		content += word + " ";
 	}
-	DataFile data;
 	data.title = helpers::stripNakedKeepStopwords(title);
 	data.content = helpers::stripNakedKeepStopwords(content);
 	return data;
