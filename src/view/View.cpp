@@ -70,7 +70,7 @@ namespace view{
 	void View::display(std::vector<FileResult> results, std::string query){
 		system("cls");
 
-		std::vector<std::string> cleanString = helpers::stripStopwords(query, stopwordsSet);
+		std::vector<std::string> cleanString = helpers::stripNakedKeepStopwords(query);
 		std::set<std::string> searchQuery;
 		std::copy( cleanString.begin(), cleanString.end(), std::inserter( searchQuery, searchQuery.end() ) );
 
@@ -78,6 +78,7 @@ namespace view{
 		{
 			DataFile resFile = readFile(results[i].indexFile);
 			cout<<results[i].listWord.size()<<endl;
+
 			cout<<"Title: ";
 			for (int j = 0; j<std::min(20,(int)resFile.title.size()); j++){
 				if (std::find(searchQuery.begin(), searchQuery.end(), resFile.title[j]) != searchQuery.end()){
@@ -91,8 +92,9 @@ namespace view{
 			}
 
 			cout << endl;
+
 			cout << "Content: ";
-			for (int j = 0; j<std::min(200,(int)resFile.content.size()); j++){
+			for (int j = 0; j<(int)resFile.content.size(); j++){
 				int tmp = j+resFile.title.size();
 				if (std::find(searchQuery.begin(), searchQuery.end(), resFile.content[j]) != searchQuery.end()){
 					SetConsoleTextAttribute(GetStdHandle (STD_OUTPUT_HANDLE), 2);
@@ -276,7 +278,6 @@ namespace view{
 
 			 if (phraseA.front() == '+') phraseA.erase(0,1);
 			 if (phraseB.front() == '+') phraseB.erase(0,1);
-
 			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
 			 if (results.size()){
 				 for (std::vector<FileResult>::iterator resIt = results.begin(); resIt != results.end(); resIt++ ){
@@ -293,6 +294,7 @@ namespace view{
 			 else{
 				 results = tmp;
 			 }
+			 cout<<phraseA<<endl<<phraseB<<endl;
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
 

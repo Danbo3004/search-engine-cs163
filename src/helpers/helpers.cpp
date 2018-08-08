@@ -102,7 +102,6 @@ namespace helpers{
 
 
 	std::vector<std::string> stripNakedKeepStopwords(std::string stripString){
-		//std::string newString = removeOddCharFromString(stripString);
 		std::vector<std::string> vstring = stringToVector(stripString);
 		removeOddCharFromVector(vstring);
 
