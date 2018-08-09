@@ -75,7 +75,7 @@ namespace view{
 		for (int i = 0; i < std::min((int)results.size(),5); ++i)
 		{
 			if (results[i].listWord.size() == 0) continue;
-			DataFile resFile = readFile(results[i].indexFile);
+			DataFile resFile = readRawFile(results[i].indexFile);
 
 			//cout<<results[i].listWord.size()<<endl;
 
@@ -284,7 +284,7 @@ namespace view{
 
 		//descending sort
 		 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
-			 return fileA.listWord.size() < fileB.listWord.size();
+			 return fileA.listWord.size() > fileB.listWord.size();
 		 });
 
 		 return results;

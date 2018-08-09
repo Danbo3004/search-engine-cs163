@@ -40,6 +40,7 @@ struct DataFile {
 };
 
 DataFile readFile(int fileNumber);
+DataFile readRawFile(int fileNumber);
 void log(std::string s);
 
 string convertNumberToString(int number);

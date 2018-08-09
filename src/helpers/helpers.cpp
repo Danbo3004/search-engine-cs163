@@ -147,6 +147,31 @@ DataFile readFile(int fileNumber)
 	return data;
 }
 
+DataFile readRawFile(int fileNumber)
+{
+	int newsNumber = fileNumber % 100;
+	int groupNumber = fileNumber / 100;
+	// int groupNumber = 1;
+	string fileName = "Group" + convertNumberToString(groupNumber) + "News" + convertNumberToString(newsNumber);
+	fileName = "./newsdatatest/" + fileName + ".txt";
+	DataFile data;
+	ifstream fin;
+	fin.open(fileName);
+	if (!fin) return data;
+	string title, content = "";
+	getline(fin, title);
+	while (!fin.eof())
+	{
+		string word;
+		fin >> word;
+		content += word + " ";
+	}
+	data.title = helpers::stringToRawVector(title);
+	data.content = helpers::stringToRawVector(content);
+	return data;
+}
+
+
 void log(std::string s) {
 	ofstream fout(constants::LOG_FILE_PATH, std::ios_base::app);
 	if (!fout) {
