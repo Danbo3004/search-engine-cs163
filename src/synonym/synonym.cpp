@@ -43,16 +43,16 @@ vector <FileResult> searchSynonym(WordsInFiles &wordsInFiles, string word){
        vector <FileResult> found = wordsInFiles.searchWord(w);
        responses.insert(responses.end(), found.begin(), found.end());
    }
-   
-   sort(responses.begin(), responses.end(), cmpSynonymByNumber);
-   
-   vector <FileResult> res;
-   // get 5 best FileResult
-   for (int i = 0; i < min(5, (int)responses.size()); ++i){
-       FileResult response = responses[i];
-       res.push_back(response);
-   }
-   return res;
+
+//   sort(responses.begin(), responses.end(), cmpSynonymByNumber);
+//
+//   vector <FileResult> res;
+//   // get 5 best FileResult
+//   for (int i = 0; i < min(5, (int)responses.size()); ++i){
+//       FileResult response = responses[i];
+//       res.push_back(response);
+//   }
+   return responses;
 }
 
 

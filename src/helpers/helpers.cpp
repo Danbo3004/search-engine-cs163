@@ -48,7 +48,8 @@ namespace helpers{
 						|| ('A'<= (*it).back() && (*it).back() <= 'Z')
 						|| ('a'<= (*it).back() && (*it).back() <= 'z')
 						|| ('0'<= (*it).back() && (*it).back() <= '9')
-						|| (*it).back() == '*'
+						|| ((*it).back() == '*')
+						|| ((*it).back() == '.' && (*it).front() == '.')
 					)){
 				(*it).pop_back();
 			}
@@ -63,6 +64,8 @@ namespace helpers{
 						|| (*it)[0] == '+'
 						|| (*it)[0] == '-'
 						|| (*it)[0] == '~'
+						|| (*it)[0] == '#'
+						|| ((*it).back() == '.' && (*it).front() == '.')
 					)){
 				(*it).erase(0,1);
 			}
@@ -91,6 +94,7 @@ namespace helpers{
 						|| ('a'<=(*it)[0] && (*it)[0] <= 'z')
 						|| ('0'<=(*it)[0] && (*it)[0] <= '9')
 						|| (*it)[0] == '$'
+						|| (*it)[0] == '#'
 				)){
 				(*it).erase(0,1);
 			}
