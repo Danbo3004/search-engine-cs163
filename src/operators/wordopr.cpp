@@ -207,8 +207,12 @@ vector<FileResult> findWildcard(WordsInFiles &words, vector<string> pre, vector<
                     {
                         if (preW.position + pre.size() + WILDCARD_DIS > postW.position)
                         {
-                            newFile.listWord.push_back(preW);
+                        	Word tmp = preW;
+                            for (;tmp.position<=postW.position;tmp.position++){
+                            	newFile.listWord.push_back(tmp);
+                            }
                         }
+
                     }
                 }
                 if (newFile.listWord.size() != 0)
