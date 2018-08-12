@@ -170,6 +170,12 @@ namespace view{
 			 phraseB = cleanString.back();
 			 tmp = andOperator(wordsInFiles,phraseA,phraseB);
 			 intersectVector(results,tmp);
+			//descending sort
+			 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+				 return fileA.listWord.size() > fileB.listWord.size();
+			 });
+
+			 return results;
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
 
@@ -186,6 +192,12 @@ namespace view{
 			 phraseB = cleanString.back();
 			 tmp = orOperator(wordsInFiles,phraseA,phraseB);
 			 unionVector(results,tmp);
+			//descending sort
+			 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+				 return fileA.listWord.size() > fileB.listWord.size();
+			 });
+
+			 return results;
 		}
 		//------------------------------------------------------------------------------------------------------
 
@@ -202,6 +214,11 @@ namespace view{
 
 			 tmp = findWildcard(wordsInFiles,vectorA,vectorB);
 			 unionVector(results,tmp);
+			//descending sort
+			 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+				 return fileA.listWord.size() > fileB.listWord.size();
+			 });
+
 			 return results;
 		}
 		///-----------------------------------------------------------------------------------------------------------------------
@@ -212,7 +229,12 @@ namespace view{
 			s = std::string(query.begin()+8,query.end());
 			cleanString = helpers::stripStopwords(s,stopwordsSet);
 			results = searchInTitle(wordsInFiles, cleanString);
-			return results;
+			//descending sort
+			 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+				 return fileA.listWord.size() > fileB.listWord.size();
+			 });
+
+			 return results;
 		}
 
 		//------------------------------------------------------------------------------------------------------
@@ -222,26 +244,48 @@ namespace view{
 	    if((!called) && (vstring.size() == 1 || (vstring.front().front() == 34 && vstring.back().back() == 34))){
 			called = true;
 			cleanString = helpers::stripNakedKeepStopwords(query);
+			//std::copy(cleanString.begin(), cleanString.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 			results = findExact(wordsInFiles, cleanString);
-			return results;
+			//return results;
+			//descending sort
+			 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+				 return fileA.listWord.size() > fileB.listWord.size();
+			 });
+
+			 return results;
+
 		}
 
 		///-----------------------------------------------------------------------------------------------------------------------
 
-		//-------------DEFAULT AND PLUS AND PRICE-----------------------------------------------------------------------------------------
 	    //-------------MINUS-----------------------------------------------------------------------------------------
 		it = std::find_if(vstring.begin(), vstring.end(), [](const string& s){
 															 return s.front() == '-';
-															 });
+	    															 });
+
+
 		if (it != vstring.end()){
-			vstring.erase(it);
+			called = true;
+			(*it).erase(0,1);
+			phraseB = *it;
+			cleanString = helpers::stripStopwords(vstring.front(), stopwordsSet);
+			phraseA = cleanString.front();
 			//std::copy(vstring.begin(), vstring.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
-			if (vstring.size() == 1) results = findExact(wordsInFiles,vstring);
+			results = minusOperator(wordsInFiles,phraseA,phraseB);
 			//system("pause");
+			//descending sort
+			 std::sort(results.begin(), results.end(), [](const FileResult& fileA, const FileResult& fileB) -> bool{
+				 return fileA.listWord.size() > fileB.listWord.size();
+			 });
+
+			 return results;
 		}
 
 
+		//-------------DEFAULT AND PLUS AND PRICE AND SYNONYM----------------------------------------------------------------------------------------
+
 	    for(it = vstring.begin(); it != vstring.end() - 1; it++){
+	    	if (called) break;
 			 if ((*(it)).front() == '$'){
 				 cleanString = helpers::stripStopwords(query, stopwordsSet);
 				 if (*(it+1) == ".."){

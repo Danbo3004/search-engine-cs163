@@ -144,7 +144,10 @@ vector<FileResult> findExact(WordsInFiles &wordsInFile, vector<string> words)
             // if match, add the current word to the result of current file
             if (found)
             {
-                result.listWord.push_back(word);
+                for (int k = 0; k< words.size(); k++){
+                	result.listWord.push_back(word);
+                	word.position++;
+                }
             }
         }
 
